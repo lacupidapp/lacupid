@@ -1,0 +1,2418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cupid — Know What's In Your Beauty</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --cream:      #fdf8f4;
+  --blush:      #f9eef2;
+  --blush2:     #f2dce5;
+  --pink:       #e8a0b8;
+  --pink-deep:  #c4617a;
+  --rose:       #d4485f;
+  --rosegold:   #c09070;
+  --rosegold2:  #e8c4a8;
+  --lavender:   #e8ddf5;
+  --plum:       #3d1a2e;
+  --plum-mid:   #7a3a52;
+  --text-muted: #b08090;
+  --white:      #ffffff;
+  --border:     #f0d8e4;
+  --shadow:     rgba(196,97,122,0.12);
+  --gold:       #c9956c;
+  /* palette compact frame colors */
+  --palette-frame:  #d4a574;
+  --palette-frame2: #f0d0a8;
+  --palette-dark:   #a07040;
+  --palette-inner:  #eddcc4;
+}
+
+/* ── THEMES ───────────────────────────────────────────── */
+[data-theme="lavender"] {
+  --cream:#f5f0ff; --blush:#ede0ff; --blush2:#dcc8f5;
+  --pink:#c4a0e8; --pink-deep:#8040c0; --rose:#6030a0;
+  --rosegold:#a080d0; --rosegold2:#d4b8f0;
+  --lavender:#f0e8ff; --plum:#2a1048; --plum-mid:#6040a0;
+  --text-muted:#9070c0; --border:#e0d0f5;
+  --shadow:rgba(128,64,192,0.12);
+  --palette-frame:#b0a0d8; --palette-frame2:#d8d0f8;
+  --palette-dark:#7060a8; --palette-inner:#e8e0ff;
+}
+[data-theme="midnight"] {
+  --cream:#18081e; --blush:#241030; --blush2:#341548;
+  --pink:#9868a8; --pink-deep:#b888c0; --rose:#a070a8;
+  --rosegold:#9878a0; --rosegold2:#7a5880;
+  --lavender:#2e1840; --plum:#e8d0f5; --plum-mid:#c0a0d8;
+  --text-muted:#806898; --border:#3e1e54;
+  --shadow:rgba(140,70,180,0.18); --white:#241030;
+  --palette-frame:#6a4888; --palette-frame2:#9878b8;
+  --palette-dark:#3a2058; --palette-inner:#3e2060;
+}
+/* Midnight: fix hardcoded light backgrounds */
+[data-theme="midnight"] .header {
+  background: linear-gradient(160deg,#241030 0%,#301440 60%,#241030 100%) !important;
+}
+[data-theme="midnight"] .scan-box {
+  background: rgba(52,21,72,0.6) !important;
+  border-color: #5a2878 !important;
+}
+[data-theme="midnight"] .card {
+  background: var(--white) !important;
+}
+[data-theme="midnight"] .btn-primary {
+  background: linear-gradient(135deg,#7050a0,#9070c0) !important;
+  box-shadow: 0 6px 20px rgba(100,60,160,0.35) !important;
+}
+[data-theme="midnight"] .nav {
+  background: #1a0828 !important;
+  border-top-color: #3e1e54 !important;
+}
+[data-theme="midnight"] .week-dot { background:#3e1e54 !important; }
+[data-theme="midnight"] .week-dot.done { background:#7050a0 !important; }
+[data-theme="midnight"] .scan-dot { background:#3e1e54 !important; }
+[data-theme="midnight"] .scan-dot.used { background:#7050a0 !important; }
+[data-theme="midnight"] .monthly-bar-fill { background:linear-gradient(90deg,#7050a0,#9070c0) !important; }
+[data-theme="midnight"] .streak-warning { background:linear-gradient(135deg,#301440,#3e1e54) !important; border-color:#5a2878 !important; }
+[data-theme="midnight"] .progress-step.done .step-check { background:#7050a0 !important; }
+[data-theme="midnight"] textarea, [data-theme="midnight"] input[type=text] {
+  background:#2e1840 !important; border-color:#5a2878 !important; color:#e8d0f5 !important;
+}
+[data-theme="midnight"] textarea::placeholder, [data-theme="midnight"] input::placeholder { color:#806898 !important; }
+[data-theme="berry"] {
+  --cream:#fff5f8; --blush:#ffe0ea; --blush2:#ffc0d5;
+  --pink:#e06090; --pink-deep:#c02060; --rose:#a01040;
+  --rosegold:#d04080; --rosegold2:#f090b8;
+  --lavender:#ffe8f4; --plum:#400820; --plum-mid:#802040;
+  --text-muted:#c05080; --border:#f0c0d8;
+  --shadow:rgba(192,32,96,0.15);
+  --palette-frame:#c07080; --palette-frame2:#e8a8b8;
+  --palette-dark:#803050; --palette-inner:#f5d8e0;
+}
+[data-theme="peach"] {
+  --cream:#fff8f3; --blush:#ffeee5; --blush2:#ffdec8;
+  --pink:#f0b090; --pink-deep:#d07040; --rose:#c05830;
+  --rosegold:#d89060; --rosegold2:#f0c090;
+  --lavender:#fff0e8; --plum:#402010; --plum-mid:#804030;
+  --text-muted:#c08060; --border:#f0d5c0;
+  --shadow:rgba(208,112,64,0.12);
+  --palette-frame:#c09068; --palette-frame2:#e8c898;
+  --palette-dark:#906040; --palette-inner:#f5e8d0;
+}
+[data-theme="cloud"] {
+  --cream:#fafaf8; --blush:#f5f3f0; --blush2:#ece8e3;
+  --pink:#c0b8b0; --pink-deep:#706860; --rose:#504840;
+  --rosegold:#a89880; --rosegold2:#d8ccc0;
+  --lavender:#eeeae5; --plum:#302820; --plum-mid:#605850;
+  --text-muted:#988880; --border:#e5e0da;
+  --shadow:rgba(160,144,128,0.12);
+  --palette-frame:#a0a0a8; --palette-frame2:#d8d8e0;
+  --palette-dark:#686870; --palette-inner:#eeeef2;
+}
+
+/* ── MAKEUP PALETTE COMPACT ───────────────────────────── */
+.palette-wrap {
+  /* outer shadow NOT clipped by mask */
+  border-radius:14px;
+  box-shadow:0 10px 36px rgba(0,0,0,0.22), 0 3px 12px rgba(0,0,0,0.12);
+  position:relative;
+}
+.palette-compact {
+  position:relative; user-select:none; overflow:hidden;
+  /* Cartouche shape — concave corner notches via CSS mask */
+  -webkit-mask:
+    radial-gradient(circle at 0 0,    transparent 22px, #000 22px) 0    0    / 50.1% 50.1% no-repeat,
+    radial-gradient(circle at 100% 0, transparent 22px, #000 22px) 100% 0    / 50.1% 50.1% no-repeat,
+    radial-gradient(circle at 0 100%, transparent 22px, #000 22px) 0    100% / 50.1% 50.1% no-repeat,
+    radial-gradient(circle at 100% 100%,transparent 22px,#000 22px) 100% 100%/ 50.1% 50.1% no-repeat;
+  mask:
+    radial-gradient(circle at 0 0,    transparent 22px, #000 22px) 0    0    / 50.1% 50.1% no-repeat,
+    radial-gradient(circle at 100% 0, transparent 22px, #000 22px) 100% 0    / 50.1% 50.1% no-repeat,
+    radial-gradient(circle at 0 100%, transparent 22px, #000 22px) 0    100% / 50.1% 50.1% no-repeat,
+    radial-gradient(circle at 100% 100%,transparent 22px,#000 22px) 100% 100%/ 50.1% 50.1% no-repeat;
+  /* The metallic frame gradient — uses per-theme vars */
+  background: linear-gradient(135deg,
+    var(--palette-frame2) 0%,
+    var(--palette-frame) 30%,
+    var(--palette-dark) 55%,
+    var(--palette-frame) 75%,
+    var(--palette-frame2) 100%);
+}
+/* Lid */
+.palette-lid-section {
+  background: linear-gradient(160deg,
+    var(--palette-frame2) 0%,
+    var(--palette-inner) 45%,
+    var(--palette-frame) 100%);
+  margin:7px; border-radius:4px;
+  padding:16px 20px 14px;
+  cursor:pointer; position:relative;
+  transition:filter 0.15s;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:8px;
+  min-height:108px;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,0.22), inset 0 0 20px rgba(0,0,0,0.05);
+}
+.palette-lid-section:active { filter:brightness(0.91); }
+/* shimmer sweep */
+.palette-lid-section::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,0.22) 50%,transparent 65%);
+  pointer-events:none; border-radius:4px;
+}
+/* corner ornaments on lid */
+.palette-lid-section::after {
+  content:'✦'; position:absolute; top:7px; right:10px;
+  font-size:10px; color:var(--palette-frame); opacity:0.7;
+}
+.palette-wings-svg { width:150px; height:54px; display:block; overflow:visible; }
+.palette-open-text {
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:12px; color:var(--palette-dark); letter-spacing:0.3px; opacity:0.88;
+}
+/* Body */
+.palette-body-section {
+  max-height:0; overflow:hidden;
+  transition:max-height 0.6s cubic-bezier(0.4,0,0.2,1);
+  background:linear-gradient(180deg,var(--palette-inner) 0%,var(--palette-frame2) 50%,var(--palette-inner) 100%);
+  border-top:2px solid var(--palette-frame);
+  margin:0 7px 7px; border-radius:0 0 4px 4px;
+}
+.palette-compact.open .palette-body-section { max-height:290px; }
+.palette-brand-text {
+  text-align:center; font-size:9px; color:var(--palette-dark);
+  letter-spacing:2px; padding:6px 0 10px;
+  font-family:'Playfair Display',serif; font-style:italic; opacity:0.75;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--plum);
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+/* SCREENS */
+.screen { display:none; min-height:100vh; padding-bottom:90px; }
+.screen.active { display:block; }
+
+/* NAV */
+.nav {
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:430px;
+  background: var(--white);
+  border-top: 1.5px solid var(--border);
+  display:flex; justify-content:space-around;
+  padding:10px 0 20px;
+  z-index:100;
+  box-shadow: 0 -4px 30px rgba(196,97,122,0.1);
+}
+.nav-btn {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  background:none; border:none; cursor:pointer;
+  font-size:10px; font-weight:600; color:var(--text-muted);
+  font-family:'DM Sans',sans-serif;
+  letter-spacing:0.3px; padding:4px 16px;
+  transition:color 0.2s;
+}
+.nav-btn.active { color:var(--pink-deep); }
+.nav-btn svg { width:20px; height:20px; }
+
+/* HEADER */
+.header {
+  background: linear-gradient(160deg, #f9eef2 0%, #fdf8f4 60%, #f5e8f0 100%);
+  padding:52px 24px 28px;
+  border-bottom: 1.5px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.header::before {
+  content:'✦';
+  position:absolute; top:16px; right:24px;
+  font-size:28px; color:var(--rosegold2); opacity:0.6;
+}
+.header::after {
+  content:'✦';
+  position:absolute; top:60px; right:14px;
+  font-size:14px; color:var(--pink); opacity:0.4;
+}
+.header-logo {
+  font-family:'Playfair Display', serif;
+  font-size:30px; font-weight:900; font-style:italic;
+  color:var(--pink-deep);
+  letter-spacing:-0.5px;
+  display:flex; align-items:center; gap:8px;
+}
+.header-logo .heart { font-style:normal; font-size:22px; }
+.header-sub { font-size:12px; color:var(--text-muted); margin-top:3px; letter-spacing:0.3px; }
+.header-row { display:flex; justify-content:space-between; align-items:flex-start; }
+
+.pro-badge {
+  background: linear-gradient(135deg, var(--rosegold), var(--rosegold2));
+  color: var(--white);
+  font-size:10px; font-weight:700;
+  padding:5px 12px; border-radius:20px;
+  letter-spacing:0.5px; font-family:'DM Sans',sans-serif;
+  box-shadow: 0 2px 8px rgba(192,144,112,0.3);
+}
+
+/* ORNAMENT DIVIDER */
+.ornament {
+  text-align:center; padding:4px 0;
+  color:var(--rosegold2); font-size:16px; letter-spacing:6px; opacity:0.7;
+}
+
+/* CARDS */
+.card {
+  background:var(--white);
+  border-radius:24px; padding:20px;
+  margin:12px 16px;
+  border:1.5px solid var(--border);
+  box-shadow:0 4px 24px var(--shadow);
+}
+.card h2 {
+  font-family:'Playfair Display',serif;
+  font-size:16px; font-weight:700;
+  margin-bottom:14px; color:var(--plum);
+}
+
+/* SCAN BOX */
+.scan-box {
+  border:2px dashed var(--pink);
+  border-radius:24px; padding:32px 20px;
+  text-align:center;
+  background: linear-gradient(135deg, rgba(249,238,242,0.8), rgba(253,248,244,0.9));
+  cursor:pointer; transition:all 0.25s; margin:12px 16px;
+  position:relative; overflow:hidden;
+}
+.scan-box::before {
+  content:'✦ ♡ ✦';
+  position:absolute; top:10px; left:50%; transform:translateX(-50%);
+  font-size:10px; color:var(--rosegold2); letter-spacing:4px; opacity:0.7;
+}
+.scan-box::after {
+  content:'✦ ♡ ✦';
+  position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+  font-size:10px; color:var(--rosegold2); letter-spacing:4px; opacity:0.7;
+}
+.scan-box:hover { border-color:var(--pink-deep); background:rgba(249,238,242,0.95); transform:translateY(-1px); }
+.scan-icon { font-size:48px; display:block; margin-bottom:14px; }
+.scan-box h3 {
+  font-family:'Playfair Display',serif;
+  font-size:18px; font-weight:700; font-style:italic;
+  color:var(--pink-deep);
+}
+.scan-box p { font-size:13px; color:var(--text-muted); margin-top:6px; line-height:1.6; }
+
+.or-divider {
+  text-align:center; font-size:11px; color:var(--text-muted);
+  margin:4px 0; position:relative;
+  text-transform:uppercase; letter-spacing:1.5px;
+}
+.or-divider::before, .or-divider::after {
+  content:''; position:absolute; top:50%;
+  width:32%; height:1px; background:var(--border);
+}
+.or-divider::before { left:16px; }
+.or-divider::after { right:16px; }
+
+textarea {
+  width:100%; border:1.5px solid var(--border);
+  border-radius:16px; padding:14px;
+  font-size:13px; resize:none; height:110px;
+  outline:none; font-family:'DM Sans',sans-serif;
+  color:var(--plum); background:var(--blush);
+  transition:border-color 0.2s; line-height:1.6;
+}
+textarea:focus { border-color:var(--pink); }
+textarea::placeholder { color:var(--text-muted); }
+
+input[type=text] {
+  background:var(--blush); color:var(--plum);
+  border:1.5px solid var(--border); border-radius:14px;
+  padding:12px 14px; font-size:14px; outline:none;
+  font-family:'DM Sans',sans-serif; transition:border-color 0.2s;
+}
+input[type=text]:focus { border-color:var(--pink); }
+input[type=text]::placeholder { color:var(--text-muted); }
+
+/* BUTTONS */
+.btn-primary {
+  width:100%; padding:15px;
+  background: linear-gradient(135deg, var(--pink-deep), var(--rose));
+  color:white; border:none; border-radius:16px;
+  font-size:15px; font-weight:600; cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  box-shadow:0 6px 20px rgba(196,97,122,0.35);
+  transition:transform 0.1s, box-shadow 0.2s;
+  letter-spacing:0.2px;
+}
+.btn-primary:active { transform:scale(0.98); }
+
+.btn-gold {
+  width:100%; padding:15px;
+  background: linear-gradient(135deg, #b8845a, var(--rosegold2), #c09070);
+  color:var(--white); border:none; border-radius:16px;
+  font-size:15px; font-weight:700; cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  box-shadow:0 6px 20px rgba(192,144,112,0.35);
+  transition:transform 0.1s;
+}
+.btn-gold:active { transform:scale(0.98); }
+
+.btn-ghost {
+  width:100%; padding:13px;
+  background:transparent; color:var(--text-muted);
+  border:1.5px solid var(--border); border-radius:16px;
+  font-size:14px; font-weight:500; cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  margin-top:8px; transition:all 0.2s;
+}
+.btn-ghost:hover { border-color:var(--pink); color:var(--plum-mid); }
+
+/* SCAN COUNT */
+.scan-count-bar {
+  margin:0 16px 4px;
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:18px; padding:14px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+  box-shadow:0 2px 12px var(--shadow);
+}
+.scan-count-bar .left { font-size:12px; color:var(--text-muted); }
+.scan-count-bar .count { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--pink-deep); }
+.scan-count-bar .label { font-size:10px; color:var(--text-muted); letter-spacing:0.5px; }
+.scan-dots { display:flex; gap:5px; margin-top:6px; }
+.scan-dot { width:26px; height:6px; border-radius:3px; background:var(--blush2); border:1px solid var(--border); transition:background 0.3s; }
+.scan-dot.used { background:linear-gradient(90deg, var(--pink), var(--pink-deep)); border-color:var(--pink); }
+
+/* RESULT */
+.result-banner {
+  border-radius:24px; margin:12px 16px 0;
+  padding:22px 20px; position:relative; overflow:hidden;
+}
+.result-banner::before {
+  content:'♡'; position:absolute; right:20px; top:16px;
+  font-size:40px; opacity:0.15; color:white;
+}
+.result-banner.danger { background:linear-gradient(135deg,#d44060,#a02040); }
+.result-banner.warn { background:linear-gradient(135deg,#c09060,#906040); }
+.result-banner.safe { background:linear-gradient(135deg,#60a888,#3d8060); }
+.result-verdict { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:white; font-style:italic; }
+.result-sub { font-size:13px; color:rgba(255,255,255,0.85); margin-top:5px; line-height:1.5; }
+
+.ingredient-list {
+  background:var(--white); border-radius:0 0 24px 24px;
+  margin:0 16px 12px; border:1.5px solid var(--border); border-top:none;
+  overflow:hidden;
+}
+.ing-row {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:13px 18px; border-bottom:1.5px solid var(--border);
+  transition:background 0.15s;
+}
+.ing-row:last-child { border-bottom:none; }
+.ing-row.flagged { background:#fef0f2; }
+.ing-row.caution { background:#fef8f0; }
+.ing-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.ing-dot.flagged { background:#d44060; box-shadow:0 0 6px rgba(212,64,96,0.4); }
+.ing-dot.caution { background:#c09060; }
+.ing-dot.ok { background:var(--border); }
+.ing-name { font-size:13px; font-weight:600; color:var(--plum); font-family:'DM Sans',sans-serif; }
+.ing-reason { font-size:11px; color:var(--text-muted); margin-top:3px; line-height:1.5; }
+.tag {
+  display:inline-block; font-size:10px; font-weight:600;
+  padding:2px 9px; border-radius:20px; margin-top:5px;
+  font-family:'DM Sans',sans-serif;
+}
+.tag.allergen { background:#fde8ec; color:#c4384a; border:1px solid #f0c0c8; }
+.tag.caution { background:#fdf0e0; color:#906020; border:1px solid #e8d0a8; }
+.tag.fragrance { background:var(--lavender); color:#7040a0; border:1px solid #d0b8e8; }
+
+/* PAYWALL */
+.paywall-overlay {
+  position:fixed; inset:0;
+  background:rgba(61,26,46,0.7); backdrop-filter:blur(8px);
+  z-index:200; display:none;
+  align-items:flex-end; justify-content:center;
+}
+.paywall-overlay.show { display:flex; }
+.paywall-sheet {
+  background: linear-gradient(170deg, #fdf8f4 0%, #f9eef2 100%);
+  border-radius:32px 32px 0 0;
+  padding:32px 24px 44px;
+  width:100%; max-width:430px;
+  border-top:2px solid var(--border);
+  text-align:center;
+  animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative; overflow:hidden;
+}
+.paywall-sheet::before {
+  content:'✦ ♡ ✦ ♡ ✦';
+  position:absolute; top:14px; left:50%; transform:translateX(-50%);
+  font-size:11px; color:var(--rosegold2); letter-spacing:6px; opacity:0.6;
+}
+@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+.paywall-icon { font-size:52px; margin:12px 0 16px; }
+.paywall-sheet h2 {
+  font-family:'Playfair Display',serif;
+  font-size:26px; font-weight:900; font-style:italic;
+  color:var(--pink-deep);
+}
+.paywall-sheet p { font-size:14px; color:var(--text-muted); margin-top:8px; line-height:1.6; }
+.paywall-price {
+  margin:20px 0;
+  background:linear-gradient(135deg, rgba(232,192,168,0.2), rgba(232,160,184,0.15));
+  border:1.5px solid var(--rosegold2);
+  border-radius:20px; padding:18px;
+}
+.paywall-price .price {
+  font-family:'Playfair Display',serif;
+  font-size:42px; font-weight:900; color:var(--pink-deep);
+}
+.paywall-price .period { font-size:13px; color:var(--text-muted); }
+.perks { text-align:left; margin:16px 0; }
+.perk { display:flex; gap:10px; align-items:center; padding:7px 0; font-size:13px; color:var(--plum-mid); }
+.perk .check { color:var(--rosegold); font-size:16px; }
+
+/* ALLERGEN */
+.allergen-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+.allergen-btn {
+  background:var(--blush); border:1.5px solid var(--border);
+  border-radius:16px; padding:12px 10px;
+  cursor:pointer; text-align:left; transition:all 0.2s;
+  display:flex; align-items:center; gap:8px;
+}
+.allergen-btn.selected { background:#fde8f0; border-color:var(--pink); }
+.allergen-btn .a-icon { font-size:20px; }
+.allergen-btn .a-label { font-size:12px; font-weight:600; color:var(--plum); }
+.allergen-btn .a-sub { font-size:10px; color:var(--text-muted); margin-top:1px; }
+
+.custom-row { display:flex; gap:8px; margin-top:10px; }
+.custom-row input { flex:1; }
+.custom-row button {
+  padding:12px 16px; background:var(--pink-deep);
+  color:white; border:none; border-radius:12px;
+  font-size:13px; font-weight:600; cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
+.custom-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.custom-tag {
+  background:#fde8f0; color:var(--pink-deep);
+  font-size:12px; font-weight:600;
+  padding:5px 12px; border-radius:20px;
+  display:flex; align-items:center; gap:6px;
+  border:1px solid var(--border);
+}
+.custom-tag .rm { cursor:pointer; opacity:0.6; font-size:14px; }
+
+/* TRACKER */
+.routine-label {
+  font-size:10px; text-transform:uppercase; letter-spacing:2px;
+  color:var(--rosegold); font-weight:700;
+  padding:14px 20px 6px; font-family:'DM Sans',sans-serif;
+}
+.routine-step {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 18px; border-bottom:1.5px solid var(--border);
+  cursor:pointer; transition:background 0.15s;
+}
+.routine-step:last-child { border-bottom:none; }
+.routine-step:hover { background:var(--blush); }
+.step-check {
+  width:26px; height:26px; border-radius:8px;
+  border:2px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; font-size:13px;
+  background:var(--blush);
+}
+.step-check.done { background:linear-gradient(135deg,var(--pink),var(--pink-deep)); border-color:var(--pink-deep); color:white; }
+.step-info { flex:1; }
+.step-name { font-size:14px; font-weight:600; color:var(--plum); }
+.step-tip { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.step-icon { font-size:22px; flex-shrink:0; }
+
+.streak-banner {
+  margin:12px 16px 4px;
+  background: linear-gradient(135deg, #fdf0f4, #fdf8f4);
+  border:1.5px solid var(--border);
+  border-radius:22px; padding:18px 20px;
+  box-shadow:0 2px 12px var(--shadow);
+}
+.streak-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.streak-num {
+  font-family:'Playfair Display',serif;
+  font-size:36px; font-weight:900; color:var(--pink-deep);
+  line-height:1;
+}
+.streak-label { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
+.streak-emoji { font-size:28px; }
+.week-row { display:flex; gap:6px; margin-bottom:12px; }
+.week-day { flex:1; text-align:center; }
+.week-day-label { font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; font-weight:600; }
+.week-dot { width:100%; aspect-ratio:1; border-radius:50%; background:var(--blush2); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:10px; transition:all 0.3s; }
+.week-dot.done { background:linear-gradient(135deg,var(--pink),var(--pink-deep)); border-color:var(--pink-deep); }
+.week-dot.today { border-color:var(--pink); border-width:2px; }
+.month-bar-wrap { display:flex; align-items:center; gap:10px; }
+.month-bar-track { flex:1; background:var(--blush2); border-radius:6px; height:8px; overflow:hidden; }
+.month-bar-fill { height:100%; background:linear-gradient(90deg,var(--pink),var(--pink-deep)); border-radius:6px; transition:width 0.5s; }
+.month-label { font-size:11px; color:var(--text-muted); white-space:nowrap; }
+
+.notif-btn {
+  margin:0 16px 4px;
+  background:var(--white); border:1.5px solid var(--border);
+  border-radius:16px; padding:14px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+  cursor:pointer; transition:border-color 0.2s;
+  box-shadow:0 2px 10px var(--shadow);
+}
+.notif-btn:hover { border-color:var(--pink); }
+.notif-btn .left { font-size:14px; font-weight:600; color:var(--plum); }
+.notif-btn .sub { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.toggle {
+  width:48px; height:26px; background:var(--border);
+  border-radius:13px; position:relative; transition:background 0.3s; flex-shrink:0;
+}
+.toggle.on { background:linear-gradient(90deg,var(--pink),var(--pink-deep)); }
+.toggle::after {
+  content:''; position:absolute; top:3px; left:3px;
+  width:20px; height:20px; border-radius:50%;
+  background:white; transition:transform 0.3s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle.on::after { transform:translateX(22px); }
+
+/* HISTORY */
+.stats-row { display:flex; gap:10px; margin:12px 16px 4px; }
+.stat-pill {
+  flex:1; background:var(--white);
+  border-radius:18px; padding:14px;
+  border:1.5px solid var(--border); text-align:center;
+  box-shadow:0 2px 12px var(--shadow);
+}
+.stat-val {
+  font-family:'Playfair Display',serif;
+  font-size:28px; font-weight:700; color:var(--pink-deep);
+}
+.stat-val.danger { color:#c4384a; }
+.stat-val.safe { color:#3d8060; }
+.stat-label { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+
+.scan-entry { padding:14px 0; border-bottom:1.5px solid var(--border); }
+.scan-entry:last-child { border-bottom:none; }
+.scan-entry-top { display:flex; justify-content:space-between; align-items:center; }
+.scan-name { font-size:14px; font-weight:600; color:var(--plum); }
+.s-badge { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; font-family:'DM Sans',sans-serif; }
+.s-badge.danger { background:#fde8ec; color:#c4384a; }
+.s-badge.warn { background:#fdf0e0; color:#906020; }
+.s-badge.safe { background:#e0f5ec; color:#3d8060; }
+.scan-date { font-size:11px; color:var(--text-muted); margin-top:3px; }
+.scan-flags { font-size:12px; color:var(--text-muted); margin-top:5px; }
+
+.section-title {
+  font-size:10px; text-transform:uppercase; letter-spacing:2px;
+  color:var(--text-muted); padding:14px 20px 4px; font-weight:700;
+  font-family:'DM Sans',sans-serif;
+}
+
+.empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
+.empty-state .e-icon { font-size:48px; display:block; margin-bottom:12px; }
+.empty-state p { font-size:14px; line-height:1.6; font-family:'Playfair Display',serif; font-style:italic; }
+
+/* TOAST */
+.toast {
+  position:fixed; top:24px; left:50%; transform:translateX(-50%);
+  background:var(--plum); color:var(--cream);
+  padding:12px 24px; border-radius:100px;
+  font-size:13px; font-weight:500;
+  z-index:300; opacity:0; transition:opacity 0.3s;
+  white-space:nowrap; box-shadow:0 4px 20px rgba(61,26,46,0.3);
+  font-family:'DM Sans',sans-serif;
+}
+.toast.show { opacity:1; }
+
+/* SCAN OVERLAY */
+.scan-overlay {
+  position:fixed; inset:0; background:rgba(61,26,46,0.7);
+  backdrop-filter:blur(6px);
+  display:none; align-items:center; justify-content:center;
+  flex-direction:column; z-index:200;
+}
+.scan-overlay.show { display:flex; }
+.spinner {
+  width:60px; height:60px; border-radius:50%;
+  border:3px solid rgba(232,160,184,0.3);
+  border-top-color:var(--pink);
+  animation:spin 0.8s linear infinite; margin-bottom:16px;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.scan-overlay p {
+  color:var(--cream); font-size:16px; font-weight:600;
+  font-family:'Playfair Display',serif; font-style:italic;
+}
+.scan-overlay small { color:rgba(253,248,244,0.6); font-size:12px; margin-top:6px; }
+
+#img-preview { width:100%; border-radius:14px; margin-top:12px; display:none; max-height:180px; object-fit:cover; border:1.5px solid var(--border); }
+
+.disclaimer {
+  margin:6px 16px; padding:12px 16px;
+  background:var(--lavender); border:1px solid #d8c8f0;
+  border-radius:14px; font-size:11px; color:var(--plum-mid); line-height:1.6;
+}
+
+.progress-wrap { background:var(--blush2); border-radius:8px; height:10px; overflow:hidden; margin-top:6px; }
+.progress-bar { height:100%; background:linear-gradient(90deg,var(--pink),var(--pink-deep)); border-radius:8px; transition:width 0.4s; }
+
+.skin-pill {
+  background:var(--blush); border:1.5px solid var(--border);
+  color:var(--text-muted); border-radius:20px;
+  padding:8px 14px; font-size:12px; font-weight:500;
+  cursor:pointer; transition:all 0.2s;
+  font-family:'DM Sans',sans-serif;
+}
+.skin-pill.on { background:#fde8f0; border-color:var(--pink); color:var(--pink-deep); }
+
+/* Sub card */
+.sub-content-free p { font-size:13px; color:var(--text-muted); margin-bottom:12px; }
+
+/* DRAMATIC REVEAL */
+@keyframes fadeSlideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+@keyframes popIn { 0%{transform:scale(0.7);opacity:0} 60%{transform:scale(1.08)} 100%{transform:scale(1);opacity:1} }
+@keyframes shimmer { 0%,100%{opacity:0.4} 50%{opacity:1} }
+@keyframes heartbeat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+.reveal-anim { animation:fadeSlideUp 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+.reveal-anim-delay { animation:fadeSlideUp 0.5s 0.15s cubic-bezier(0.34,1.56,0.64,1) both; }
+.verdict-pop { animation:popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+.shimmer-anim { animation:shimmer 2s ease-in-out infinite; }
+
+/* VERDICT HERO */
+.verdict-hero {
+  margin:0; padding:36px 24px 28px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.verdict-hero.danger { background:linear-gradient(160deg,#1a0010,#3d0020,#600030); }
+.verdict-hero.warn   { background:linear-gradient(160deg,#1a0f00,#3d2000,#604010); }
+.verdict-hero.safe   { background:linear-gradient(160deg,#001a10,#003d20,#006040); }
+.verdict-orbs {
+  position:absolute; inset:0; pointer-events:none; overflow:hidden;
+}
+.verdict-orb {
+  position:absolute; border-radius:50%;
+  filter:blur(40px); opacity:0.25;
+}
+.verdict-icon-big {
+  font-size:64px; display:block; margin-bottom:16px;
+  animation:heartbeat 2s ease-in-out infinite;
+}
+.verdict-title {
+  font-family:'Playfair Display',serif;
+  font-size:28px; font-weight:900; font-style:italic;
+  color:white; line-height:1.2; margin-bottom:10px;
+}
+.verdict-sub-text { font-size:14px; color:rgba(255,255,255,0.75); line-height:1.6; }
+.verdict-buy-badge {
+  display:inline-block; margin-top:16px;
+  padding:10px 28px; border-radius:100px;
+  font-size:15px; font-weight:800;
+  font-family:'DM Sans',sans-serif; letter-spacing:0.5px;
+}
+.verdict-buy-badge.buy { background:rgba(255,255,255,0.2); color:white; border:2px solid rgba(255,255,255,0.4); }
+.verdict-buy-badge.skip { background:rgba(255,50,80,0.3); color:white; border:2px solid rgba(255,100,120,0.4); }
+.verdict-buy-badge.caution { background:rgba(255,180,60,0.2); color:white; border:2px solid rgba(255,200,80,0.4); }
+
+/* ING ROWS animated */
+.ing-row { animation:fadeSlideUp 0.4s both; }
+
+
+/* SCAN LOADING — more dramatic */
+.scan-overlay p { font-size:18px; }
+.scan-countdown { font-family:'Playfair Display',serif; font-size:48px; font-weight:900; color:var(--pink); margin-bottom:8px; animation:heartbeat 0.8s ease-in-out infinite; }
+
+/* STREAK LOSS AVERSION banner */
+.streak-warning {
+  margin:0 16px 8px;
+  background:linear-gradient(135deg,#3d0020,#600030);
+  border-radius:18px; padding:14px 18px;
+  display:flex; align-items:center; gap:12px;
+  box-shadow:0 4px 20px rgba(196,0,60,0.3);
+}
+.streak-warning-text { font-size:13px; color:rgba(255,255,255,0.9); font-weight:600; line-height:1.4; }
+.streak-warning-emoji { font-size:28px; flex-shrink:0; }
+
+/* BARCODE */
+.barcode-overlay {
+  position:fixed; inset:0; background:rgba(61,26,46,0.92);
+  z-index:250; display:none; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+.barcode-overlay.show { display:flex; }
+.barcode-frame {
+  width:280px; height:280px; position:relative;
+  border-radius:20px; overflow:hidden; background:#000;
+}
+#barcode-video { width:100%; height:100%; object-fit:cover; }
+.barcode-corners::before,.barcode-corners::after {
+  content:''; position:absolute; width:40px; height:40px;
+  border-color:var(--pink); border-style:solid;
+}
+.barcode-corners::before { top:12px; left:12px; border-width:3px 0 0 3px; border-radius:6px 0 0 0; }
+.barcode-corners::after { bottom:12px; right:12px; border-width:0 3px 3px 0; border-radius:0 0 6px 0; }
+.barcode-line {
+  position:absolute; left:10%; width:80%; height:2px;
+  background:linear-gradient(90deg,transparent,var(--pink),transparent);
+  animation:barscan 2s ease-in-out infinite;
+}
+@keyframes barscan { 0%,100%{top:15%} 50%{top:80%} }
+.barcode-tip { color:rgba(253,248,244,0.7); font-size:13px; margin-top:16px; text-align:center; }
+.barcode-status { color:var(--cream); font-size:14px; font-weight:600; margin-top:10px; font-family:'Playfair Display',serif; font-style:italic; }
+
+/* WINGS */
+.wings-card {
+  margin:12px 16px 4px;
+  background:linear-gradient(160deg,#fff5f8,#fdf8f4,#f8f0ff);
+  border:1.5px solid var(--border);
+  border-radius:24px; padding:20px;
+  text-align:center;
+  box-shadow:0 4px 24px var(--shadow);
+  position:relative; overflow:hidden;
+}
+.wings-svg { width:160px; height:90px; margin:0 auto 8px; display:block; }
+.wings-level { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; font-style:italic; color:var(--pink-deep); }
+.wings-sub { font-size:11px; color:var(--text-muted); margin-top:4px; line-height:1.5; }
+.wings-milestones { display:flex; justify-content:center; gap:6px; margin-top:14px; flex-wrap:wrap; }
+.milestone-pip {
+  font-size:10px; padding:4px 10px; border-radius:20px;
+  border:1.5px solid var(--border); color:var(--text-muted);
+  font-weight:600; background:var(--blush);
+  font-family:'DM Sans',sans-serif;
+}
+.milestone-pip.reached { background:linear-gradient(135deg,#fde8f0,var(--lavender)); border-color:var(--pink); color:var(--pink-deep); }
+</style>
+</head>
+<body>
+
+<!-- SCANNER -->
+<div id="screen-scan" class="screen active">
+  <div class="header">
+    <div class="header-row">
+      <div>
+        <div class="header-logo"><span class="heart">🏹</span> Cupid</div>
+        <div class="header-sub">Find what's truly safe for you, darling</div>
+      </div>
+      <div class="pro-badge">✦ Pro</div>
+    </div>
+  </div>
+
+  <div class="scan-count-bar" id="scan-count-bar">
+    <div>
+      <div class="left">Free scans remaining</div>
+      <div class="scan-dots" id="scan-dots"></div>
+    </div>
+    <div style="text-align:right;">
+      <div class="count" id="scans-left">5</div>
+      <div class="label">of 5 left</div>
+    </div>
+  </div>
+
+  <!-- Barcode scan button -->
+  <div style="margin:12px 16px 4px;">
+    <button class="btn-primary" onclick="openBarcodeScanner()" style="display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;">
+      <span>▦</span> Scan Product Barcode
+    </button>
+  </div>
+
+  <div class="or-divider" style="margin:4px 16px;">✦ or photograph the label ✦</div>
+
+  <div class="scan-box" onclick="document.getElementById('img-input').click()">
+    <span class="scan-icon" id="scan-icon-emoji">📸</span>
+    <h3 id="scan-box-title">Photograph a Label</h3>
+    <p id="scan-box-sub">Take or upload a photo of any ingredient list<br>and Cupid reads it for you ♡</p>
+    <input type="file" id="img-input" accept="image/*" capture="environment" style="display:none" onchange="handleImage(event)">
+    <img id="img-preview" />
+    <div id="ocr-status" style="display:none;margin-top:12px;font-size:12px;color:var(--pink-deep);font-weight:600;font-style:italic;"></div>
+  </div>
+
+  <div class="or-divider" style="margin:0 16px;">✦ or paste ingredients ✦</div>
+
+  <div class="card" style="margin-top:10px;">
+    <h2>Ingredient List</h2>
+    <textarea id="ing-input" placeholder="Water, Glycerin, Niacinamide, Parfum, Sodium Lauryl Sulfate..."></textarea>
+    <div style="margin-top:12px;">
+      <button class="btn-primary" onclick="tryAnalyze()">🏹 Analyze with Cupid</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:0;">
+    <h2>What do the results mean? ♡</h2>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fef0f4;border-radius:14px;border:1.5px solid #f0c8d4;">
+        <div style="width:12px;height:12px;border-radius:50%;background:#d44060;flex-shrink:0;box-shadow:0 0 6px rgba(212,64,96,0.4);"></div>
+        <div><div style="font-size:13px;font-weight:700;color:var(--plum);">Allergen Detected</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Avoid this product — contains an ingredient flagged for your skin profile.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fef8f0;border-radius:14px;border:1.5px solid #e8d0a8;">
+        <div style="width:12px;height:12px;border-radius:50%;background:#c09060;flex-shrink:0;"></div>
+        <div><div style="font-size:13px;font-weight:700;color:var(--plum);">Use with Caution</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Not an allergen, but can irritate sensitive skin. Patch test first.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f0faf5;border-radius:14px;border:1.5px solid #b8e8d0;">
+        <div style="width:12px;height:12px;border-radius:50%;background:#3d8060;flex-shrink:0;"></div>
+        <div><div style="font-size:13px;font-weight:700;color:var(--plum);">Safe for You</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">No concerns found. This product looks good for your skin ♡</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    🌸 <strong>Cupid's promise:</strong> Our database covers 60+ ingredients based on EU allergen regulations & dermatological research. Always consult a dermatologist for confirmed allergies.
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results" class="screen">
+  <div id="verdict-hero-wrap"></div>
+  <div id="result-output"></div>
+  <div style="padding:0 16px 16px;">
+    <button class="btn-primary reveal-anim-delay" onclick="saveScan()" style="background:linear-gradient(135deg,var(--rosegold),var(--rosegold2));box-shadow:0 6px 20px rgba(192,144,112,0.35);margin-bottom:8px;">♡ Save to My Diary</button>
+    <button class="btn-ghost reveal-anim-delay" onclick="showScreen('scan')">← Scan Another Product</button>
+  </div>
+</div>
+
+<!-- TRACKER -->
+<div id="screen-tracker" class="screen">
+  <div class="header">
+    <div class="header-logo"><span class="heart">🏹</span> Cupid</div>
+    <div class="header-sub">Your daily skin ritual ♡</div>
+  </div>
+
+  <div class="streak-banner">
+    <div class="streak-top">
+      <div>
+        <div class="streak-label">Current Streak</div>
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <div class="streak-num" id="streak-num">0</div>
+          <div class="streak-label">days</div>
+        </div>
+        <div style="font-size:11px;color:var(--pink-deep);font-style:italic;margin-top:2px;" id="streak-msg">Start your ritual today!</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="streak-emoji">🌸</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;" id="month-days-label">0 days this month</div>
+      </div>
+    </div>
+    <div class="week-row" id="week-row"></div>
+    <div class="month-bar-wrap">
+      <span class="month-label" id="month-name">June</span>
+      <div class="month-bar-track"><div class="month-bar-fill" id="month-bar" style="width:0%"></div></div>
+      <span class="month-label" id="month-pct">0%</span>
+    </div>
+  </div>
+
+  <!-- STREAK WARNING (shown if streak > 0 and today not yet complete) -->
+  <div class="streak-warning" id="streak-warning" style="display:none;">
+    <div class="streak-warning-emoji">🔥</div>
+    <div class="streak-warning-text" id="streak-warning-text">Don't break your streak today ♡</div>
+  </div>
+
+  <!-- WINGS -->
+  <div class="wings-card">
+    <svg class="wings-svg" id="wings-svg" viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="wings-level" id="wings-level">Seedling ✦</div>
+    <div class="wings-sub" id="wings-sub">Complete your ritual daily and watch your wings grow ♡</div>
+    <div class="wings-milestones" id="wings-milestones"></div>
+  </div>
+
+  <div class="notif-btn" onclick="toggleNotif()" id="notif-btn">
+    <div>
+      <div class="left">🔔 Daily Reminders</div>
+      <div class="sub" id="notif-sub">Tap to enable AM & PM reminders</div>
+    </div>
+    <div class="toggle" id="notif-toggle"></div>
+  </div>
+
+  <!-- TRACKER TABS -->
+  <div style="display:flex;gap:8px;padding:0 16px 4px;">
+    <button class="tracker-tab-btn" data-tab="skincare" onclick="switchTrackerTab('skincare')"
+      style="flex:1;padding:9px 0;border-radius:20px;border:1.5px solid var(--pink-deep);background:var(--pink-deep);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.22s;">🌿 Skincare</button>
+    <button class="tracker-tab-btn" data-tab="makeup" onclick="switchTrackerTab('makeup')"
+      style="flex:1;padding:9px 0;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.22s;">💄 Makeup</button>
+  </div>
+
+  <!-- SKINCARE TAB -->
+  <div id="skincare-tab-content">
+    <div class="routine-label" style="display:flex;justify-content:space-between;align-items:center;">
+      <span>☀️ Morning Ritual</span>
+      <button id="am-edit-btn" onclick="toggleEditMode('am')"
+        style="font-size:11px;font-weight:700;color:var(--text-muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:3px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;">✎ Edit</button>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;"><div id="am-steps"></div></div>
+
+    <div class="routine-label" style="display:flex;justify-content:space-between;align-items:center;">
+      <span>🌙 Evening Ritual</span>
+      <button id="pm-edit-btn" onclick="toggleEditMode('pm')"
+        style="font-size:11px;font-weight:700;color:var(--text-muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:3px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;">✎ Edit</button>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;"><div id="pm-steps"></div></div>
+  </div>
+
+  <!-- MAKEUP TAB -->
+  <div id="makeup-tab-content" style="display:none;">
+    <div class="routine-label" style="display:flex;justify-content:space-between;align-items:center;">
+      <span>💄 Makeup Steps</span>
+      <button id="mk-edit-btn" onclick="toggleEditMode('makeup')"
+        style="font-size:11px;font-weight:700;color:var(--text-muted);background:none;border:1.5px solid var(--border);border-radius:20px;padding:3px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;display:none;">✎ Edit</button>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;"><div id="mk-steps"></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Today's Progress ♡</h2>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:0%;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:8px;">
+      <span style="font-size:12px;color:var(--text-muted);" id="progress-label">0 of 9 steps complete</span>
+      <span style="font-size:12px;color:var(--pink-deep);font-weight:700;" id="progress-pct">0%</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>How's Your Skin Today? 🌿</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;" id="skin-log-btns"></div>
+    <button class="btn-primary" style="margin-top:14px;" onclick="saveSkinLog()">Log Today ♡</button>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="screen-profile" class="screen">
+  <div class="header">
+    <div class="header-logo"><span class="heart">🏹</span> Cupid</div>
+    <div class="header-sub">Your allergens & sensitivities</div>
+  </div>
+
+  <div class="card">
+    <h2>Your Name ♡</h2>
+    <input type="text" id="profile-name" placeholder="What shall we call you?" style="width:100%;" oninput="saveProfile()">
+  </div>
+
+  <div class="card">
+    <h2>Your Age ♡</h2>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Cupid tailors skincare recommendations to your age and skin stage.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;" id="age-group-btns"></div>
+    <div id="age-skincare-tip" style="margin-top:14px;display:none;"></div>
+  </div>
+
+  <div class="card">
+    <h2>Your Sensitivities</h2>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Select everything that affects you, darling. Cupid will flag these in every scan.</p>
+    <div class="allergen-grid" id="allergen-grid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Custom Ingredients to Avoid</h2>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Add any ingredient you personally react to.</p>
+    <div class="custom-row">
+      <input type="text" id="custom-input" placeholder="e.g. Linalool, Citronellol..." style="width:auto;" onkeydown="if(event.key==='Enter')addCustom()">
+      <button onclick="addCustom()">Add</button>
+    </div>
+    <div class="custom-tags" id="custom-tags"></div>
+  </div>
+
+  <div style="padding:0 16px 8px;">
+    <button class="btn-primary" onclick="saveProfile();showToast('Profile saved ♡')">Save My Profile</button>
+  </div>
+
+  <div class="card" id="sub-status-card">
+    <h2>Subscription ✦</h2>
+    <div id="sub-status-content"></div>
+  </div>
+
+  <div class="card">
+    <h2>Cupid's Palette ✦</h2>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Tap the compact and pick your shade, darling.</p>
+    <div class="palette-wrap">
+      <div class="palette-compact" id="palette-compact">
+        <div class="palette-lid-section" onclick="togglePalette()">
+          <!-- Angel wings SVG -->
+          <svg class="palette-wings-svg" viewBox="0 0 150 54" xmlns="http://www.w3.org/2000/svg">
+            <!-- Left wing: 3 feather layers -->
+            <path d="M68 27 C52 12 24 6 8 14 C2 18 3 26 10 27 C28 20 50 23 68 27" style="fill:var(--palette-frame);opacity:0.95"/>
+            <path d="M68 27 C46 17 20 17 6 24 C1 28 4 34 11 34 C32 27 50 27 68 27" style="fill:var(--palette-frame);opacity:0.72"/>
+            <path d="M68 27 C50 24 28 26 12 32 C5 36 9 43 18 41 C38 34 54 30 68 27" style="fill:var(--palette-frame);opacity:0.48"/>
+            <!-- Right wing: mirror -->
+            <path d="M82 27 C98 12 126 6 142 14 C148 18 147 26 140 27 C122 20 100 23 82 27" style="fill:var(--palette-frame);opacity:0.95"/>
+            <path d="M82 27 C104 17 130 17 144 24 C149 28 146 34 139 34 C118 27 100 27 82 27" style="fill:var(--palette-frame);opacity:0.72"/>
+            <path d="M82 27 C100 24 122 26 138 32 C145 36 141 43 132 41 C112 34 96 30 82 27" style="fill:var(--palette-frame);opacity:0.48"/>
+            <!-- Center body -->
+            <ellipse cx="75" cy="29" rx="11" ry="8" style="fill:var(--palette-frame2)"/>
+            <!-- Heart -->
+            <path d="M75 36 C68 31 65 27 65 24 C65 21 68 19 71 19 C73 19 75 21 75 21 C75 21 77 19 79 19 C82 19 85 21 85 24 C85 27 82 31 75 36Z" style="fill:var(--palette-dark);opacity:0.75"/>
+          </svg>
+          <!-- Cursive "tap to open" -->
+          <div class="palette-open-text" id="palette-lid-hint">tap to open</div>
+          <!-- top-left corner ornament -->
+          <span style="position:absolute;top:7px;left:10px;font-size:10px;color:var(--palette-frame);opacity:0.65;">✦</span>
+        </div>
+        <div class="palette-body-section" id="palette-body">
+          <div id="palette-pans"></div>
+          <div class="palette-brand-text">✦ Cupid Cosmétique ✦</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div id="screen-history" class="screen">
+  <div class="header">
+    <div class="header-logo"><span class="heart">🏹</span> Cupid</div>
+    <div class="header-sub">Your product diary ♡</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill"><div class="stat-val" id="s-total">0</div><div class="stat-label">Scans</div></div>
+    <div class="stat-pill"><div class="stat-val danger" id="s-flagged">0</div><div class="stat-label">Flagged</div></div>
+    <div class="stat-pill"><div class="stat-val safe" id="s-safe">0</div><div class="stat-label">Safe</div></div>
+  </div>
+
+  <div class="ornament" style="margin:8px 0;">✦ ♡ ✦</div>
+
+  <div class="section-title">Recent Scans</div>
+  <div class="card" id="history-list"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showScreen('scan')" id="nav-scan">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+    Scanner
+  </button>
+  <button class="nav-btn" onclick="showScreen('tracker')" id="nav-tracker">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Ritual
+  </button>
+  <button class="nav-btn" onclick="showScreen('profile')" id="nav-profile">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Profile
+  </button>
+  <button class="nav-btn" onclick="showScreen('history')" id="nav-history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+    Diary
+  </button>
+</nav>
+
+<!-- PAYWALL -->
+<div class="paywall-overlay" id="paywall">
+  <div class="paywall-sheet">
+    <div class="paywall-icon">🏹</div>
+    <h2>Unlock Cupid Pro</h2>
+    <p>You've used all 5 free scans. Upgrade to Pro for unlimited scans, your full diary, and real-time allergen updates.</p>
+    <div class="paywall-price">
+      <div class="price">$20</div>
+      <div class="period">per month · cancel anytime</div>
+    </div>
+    <div class="perks">
+      <div class="perk"><span class="check">♡</span> Unlimited ingredient scans</div>
+      <div class="perk"><span class="check">♡</span> Full product diary & history</div>
+      <div class="perk"><span class="check">♡</span> Real-time EU allergen updates</div>
+      <div class="perk"><span class="check">♡</span> Daily skin ritual tracker</div>
+      <div class="perk"><span class="check">♡</span> Priority support from our team</div>
+    </div>
+    <button class="btn-gold" onclick="simulateSubscribe()">✦ Become a Pro Member</button>
+    <button class="btn-ghost" onclick="dismissPaywall()">Maybe later</button>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:12px;">Secure payment via Stripe · 7-day free trial</p>
+  </div>
+</div>
+
+<!-- BARCODE OVERLAY -->
+<div class="barcode-overlay" id="barcode-overlay">
+  <div class="barcode-frame">
+    <video id="barcode-video" autoplay playsinline muted></video>
+    <div class="barcode-corners"></div>
+    <div class="barcode-line"></div>
+  </div>
+  <div class="barcode-status" id="barcode-status">Point at any product barcode ♡</div>
+  <p class="barcode-tip">Works on skincare, makeup, haircare, and more</p>
+  <button onclick="closeBarcodeScanner()" style="margin-top:16px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);color:white;border-radius:14px;padding:12px 28px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Cancel</button>
+</div>
+
+<!-- SCAN OVERLAY -->
+<div class="scan-overlay" id="scan-overlay">
+  <div class="scan-countdown" id="scan-countdown">♡</div>
+  <p id="scan-overlay-msg">Cupid is reading the label...</p>
+  <small>Checking every ingredient against your profile ♡</small>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const FREE_SCAN_LIMIT = 5;
+
+const ALLERGEN_PRESETS = [
+  { id:"fragrance", icon:"🌸", label:"Fragrance / Parfum", sub:"Top allergen", keys:["parfum","fragrance","linalool","limonene","citronellol","geraniol","eugenol","cinnamal","coumarin","isoeugenol","hydroxycitronellal","farnesol","amyl cinnamal"] },
+  { id:"sls", icon:"🧴", label:"Sulfates (SLS/SLES)", sub:"Harsh surfactants", keys:["sodium lauryl sulfate","sodium laureth sulfate","ammonium lauryl sulfate"] },
+  { id:"parabens", icon:"🧪", label:"Parabens", sub:"Preservatives", keys:["methylparaben","propylparaben","butylparaben","ethylparaben"] },
+  { id:"alcohol", icon:"🍶", label:"Drying Alcohols", sub:"SD Alcohol, Isopropyl", keys:["denatured alcohol","alcohol denat","isopropyl alcohol","sd alcohol"] },
+  { id:"eo", icon:"🌿", label:"Essential Oils", sub:"Lavender, Tea Tree...", keys:["tea tree oil","lavender oil","peppermint oil","eucalyptus oil","bergamot oil","lemon oil","rosemary oil"] },
+  { id:"formaldehyde", icon:"⚠️", label:"Formaldehyde", sub:"& releasers", keys:["formaldehyde","quaternium-15","dmdm hydantoin","imidazolidinyl urea","diazolidinyl urea"] },
+  { id:"mi", icon:"🔬", label:"MI / MCI", sub:"Preservatives", keys:["methylisothiazolinone","methylchloroisothiazolinone"] },
+  { id:"sunscreen", icon:"☀️", label:"Chemical Sunscreen", sub:"Oxybenzone, Octinoxate", keys:["oxybenzone","octinoxate","homosalate","avobenzone"] },
+  { id:"makeup_dyes", icon:"💄", label:"Makeup Dyes & Pigments", sub:"D&C dyes, Carmine, Bismuth", keys:["carmine","ci 75470","bismuth oxychloride","d&c red","fd&c yellow","fd&c blue","d&c orange","coal tar","p-phenylenediamine"] },
+  { id:"comedogenic", icon:"🫧", label:"Comedogenic Ingredients", sub:"Pore-cloggers", keys:["isopropyl myristate","isopropyl palmitate","lanolin","mineral oil","petrolatum","cocoa butter"] },
+  { id:"haircare_alerts", icon:"💇", label:"Hair Dye / Bleach Alerts", sub:"PPD, Ammonium Persulfate", keys:["p-phenylenediamine","ammonium persulfate","ammonium thioglycolate","hydrogen peroxide","resorcinol"] },
+  { id:"silicones", icon:"🌀", label:"Silicones (Build-up)", sub:"Cyclopentasiloxane, etc.", keys:["cyclopentasiloxane","cyclomethicone","dimethicone","cyclotetrasiloxane","polydimethylsiloxane"] },
+];
+
+const INGREDIENT_DB = {
+  "parfum":{ flag:"allergen", label:"Parfum (Fragrance)", reason:"Umbrella term concealing 200+ chemicals. #1 cause of cosmetic contact dermatitis.", tags:["fragrance","allergen"] },
+  "fragrance":{ flag:"allergen", label:"Fragrance", reason:"Same as Parfum. Can contain any of 3,000+ undisclosed chemicals.", tags:["fragrance","allergen"] },
+  "linalool":{ flag:"caution", label:"Linalool", reason:"Fragrance compound that oxidizes into a contact allergen over time.", tags:["fragrance"] },
+  "limonene":{ flag:"caution", label:"Limonene", reason:"Citrus-derived fragrance. Frequent sensitizer when oxidized.", tags:["fragrance"] },
+  "citronellol":{ flag:"caution", label:"Citronellol", reason:"One of 26 EU-regulated fragrance allergens.", tags:["fragrance"] },
+  "geraniol":{ flag:"caution", label:"Geraniol", reason:"Floral fragrance chemical. EU-regulated allergen.", tags:["fragrance"] },
+  "eugenol":{ flag:"caution", label:"Eugenol", reason:"Clove-derived fragrance. Frequent leave-on allergen.", tags:["fragrance"] },
+  "cinnamal":{ flag:"allergen", label:"Cinnamal", reason:"Cinnamon fragrance. Strong sensitizer — EU restricted.", tags:["fragrance","allergen"] },
+  "coumarin":{ flag:"caution", label:"Coumarin", reason:"Sweet fragrance chemical — EU-regulated sensitizer.", tags:["fragrance"] },
+  "benzyl alcohol":{ flag:"caution", label:"Benzyl Alcohol", reason:"Fragrance & preservative. Can irritate sensitive individuals.", tags:["fragrance"] },
+  "isoeugenol":{ flag:"allergen", label:"Isoeugenol", reason:"Strong fragrance allergen. Commonly triggers contact dermatitis.", tags:["fragrance","allergen"] },
+  "hydroxycitronellal":{ flag:"caution", label:"Hydroxycitronellal", reason:"EU-regulated fragrance sensitizer.", tags:["fragrance"] },
+  "farnesol":{ flag:"caution", label:"Farnesol", reason:"Floral fragrance allergen. EU-regulated.", tags:["fragrance"] },
+  "butylphenyl methylpropional":{ flag:"allergen", label:"Lilial (BMHCA)", reason:"EU BANNED since 2022. Still found in some products.", tags:["allergen"] },
+  "methylisothiazolinone":{ flag:"allergen", label:"Methylisothiazolinone (MI)", reason:"Potent allergen. Banned in EU leave-on products. Major eczema trigger.", tags:["allergen"] },
+  "methylchloroisothiazolinone":{ flag:"allergen", label:"MCI / Kathon", reason:"Paired with MI. Very strong sensitizer. EU restricted.", tags:["allergen"] },
+  "formaldehyde":{ flag:"allergen", label:"Formaldehyde", reason:"Known carcinogen and allergen. Banned/restricted in EU, CA.", tags:["allergen"] },
+  "quaternium-15":{ flag:"allergen", label:"Quaternium-15", reason:"Formaldehyde-releasing preservative. Frequent sensitizer.", tags:["allergen"] },
+  "dmdm hydantoin":{ flag:"caution", label:"DMDM Hydantoin", reason:"Formaldehyde releaser. Linked to hair loss lawsuits.", tags:["caution"] },
+  "imidazolidinyl urea":{ flag:"caution", label:"Imidazolidinyl Urea", reason:"Formaldehyde releaser. Irritates sensitive skin.", tags:["caution"] },
+  "diazolidinyl urea":{ flag:"caution", label:"Diazolidinyl Urea", reason:"Formaldehyde releaser. Potential sensitizer.", tags:["caution"] },
+  "methylparaben":{ flag:"caution", label:"Methylparaben", reason:"Most common paraben. Generally safe but some prefer to avoid.", tags:["caution"] },
+  "propylparaben":{ flag:"caution", label:"Propylparaben", reason:"Stronger endocrine disruption concerns. EU restricts for children.", tags:["caution"] },
+  "butylparaben":{ flag:"caution", label:"Butylparaben", reason:"Highest endocrine concern among parabens.", tags:["caution"] },
+  "phenoxyethanol":{ flag:"caution", label:"Phenoxyethanol", reason:"Common preservative. Can irritate eyes and sensitive skin.", tags:["caution"] },
+  "sodium lauryl sulfate":{ flag:"caution", label:"Sodium Lauryl Sulfate (SLS)", reason:"Harsh surfactant. Strips skin barrier, triggers eczema flares.", tags:["irritant"] },
+  "sodium laureth sulfate":{ flag:"caution", label:"Sodium Laureth Sulfate (SLES)", reason:"Milder than SLS but still drying.", tags:["caution"] },
+  "ammonium lauryl sulfate":{ flag:"caution", label:"Ammonium Lauryl Sulfate", reason:"Similar to SLS. Irritating to sensitive scalps.", tags:["irritant"] },
+  "denatured alcohol":{ flag:"caution", label:"Denatured Alcohol", reason:"Drying and barrier-disrupting. Triggers redness in rosacea.", tags:["irritant"] },
+  "alcohol denat":{ flag:"caution", label:"Alcohol Denat", reason:"Same as denatured alcohol. Damages skin barrier.", tags:["irritant"] },
+  "isopropyl alcohol":{ flag:"caution", label:"Isopropyl Alcohol", reason:"Very drying. Kills beneficial skin bacteria.", tags:["irritant"] },
+  "oxybenzone":{ flag:"caution", label:"Oxybenzone", reason:"Chemical UV filter. Hormone disruption concerns. Reef-damaging.", tags:["caution"] },
+  "octinoxate":{ flag:"caution", label:"Octinoxate", reason:"Chemical sunscreen. Endocrine disruption. Harmful to coral.", tags:["caution"] },
+  "homosalate":{ flag:"caution", label:"Homosalate", reason:"EU reduced max concentration due to hormone concerns.", tags:["caution"] },
+  "tea tree oil":{ flag:"caution", label:"Tea Tree Oil", reason:"Antibacterial but can cause dermatitis. Oxidizes over time.", tags:["caution"] },
+  "lavender oil":{ flag:"caution", label:"Lavender Oil", reason:"Contains linalool & linalyl acetate — both fragrance allergens.", tags:["fragrance"] },
+  "peppermint oil":{ flag:"caution", label:"Peppermint Oil", reason:"Irritating to mucous membranes.", tags:["irritant"] },
+  "bergamot oil":{ flag:"caution", label:"Bergamot Oil", reason:"Phototoxic. Causes burns/darkening in UV light.", tags:["caution"] },
+  "lemon oil":{ flag:"caution", label:"Lemon Oil", reason:"Phototoxic citrus oil. Causes hyperpigmentation in sunlight.", tags:["caution"] },
+  "water":{ flag:"ok", label:"Water (Aqua)", reason:"Base ingredient. Completely safe.", tags:[] },
+  "glycerin":{ flag:"ok", label:"Glycerin", reason:"Excellent humectant. Safe for all skin types.", tags:[] },
+  "niacinamide":{ flag:"ok", label:"Niacinamide (Vitamin B3)", reason:"Anti-inflammatory, brightening, pore-minimizing. Very well tolerated.", tags:[] },
+  "hyaluronic acid":{ flag:"ok", label:"Hyaluronic Acid", reason:"Hydrating humectant. Extremely safe and beneficial.", tags:[] },
+  "ceramide":{ flag:"ok", label:"Ceramides", reason:"Barrier-repairing lipids. Essential for sensitive/dry skin.", tags:[] },
+  "ceramide np":{ flag:"ok", label:"Ceramide NP", reason:"Key barrier lipid. Restores skin barrier function.", tags:[] },
+  "squalane":{ flag:"ok", label:"Squalane", reason:"Lightweight, non-comedogenic. Excellent for all skin types.", tags:[] },
+  "panthenol":{ flag:"ok", label:"Panthenol (Vitamin B5)", reason:"Soothing and moisturizing. Great for sensitive skin.", tags:[] },
+  "tocopherol":{ flag:"ok", label:"Tocopherol (Vitamin E)", reason:"Antioxidant. Generally safe and beneficial.", tags:[] },
+  "allantoin":{ flag:"ok", label:"Allantoin", reason:"Soothing and healing. Excellent for sensitive/irritated skin.", tags:[] },
+  "centella asiatica":{ flag:"ok", label:"Centella Asiatica (Cica)", reason:"Anti-inflammatory. Excellent for sensitive and damaged skin.", tags:[] },
+  "centella asiatica extract":{ flag:"ok", label:"Centella Asiatica Extract", reason:"Soothing, anti-inflammatory cica extract.", tags:[] },
+  "zinc oxide":{ flag:"ok", label:"Zinc Oxide", reason:"Mineral sunscreen. Safe, non-irritating, ideal for sensitive skin.", tags:[] },
+  "titanium dioxide":{ flag:"ok", label:"Titanium Dioxide", reason:"Mineral sunscreen. Very safe and non-reactive.", tags:[] },
+  "retinol":{ flag:"ok", label:"Retinol (Vitamin A)", reason:"Effective anti-aging. Start low — can irritate until skin adapts.", tags:[] },
+  "ascorbic acid":{ flag:"ok", label:"Ascorbic Acid (Vitamin C)", reason:"Brightening antioxidant.", tags:[] },
+  "salicylic acid":{ flag:"ok", label:"Salicylic Acid (BHA)", reason:"Pore-clearing exfoliant. Avoid if allergic to aspirin.", tags:[] },
+  "glycolic acid":{ flag:"ok", label:"Glycolic Acid (AHA)", reason:"Effective exfoliant. Can sensitize if overused.", tags:[] },
+  "shea butter":{ flag:"ok", label:"Shea Butter", reason:"Nourishing emollient. Safe unless nut allergy.", tags:[] },
+  "aloe vera":{ flag:"ok", label:"Aloe Vera", reason:"Soothing anti-inflammatory. Great for sensitive skin.", tags:[] },
+  "jojoba oil":{ flag:"ok", label:"Jojoba Oil", reason:"Non-comedogenic. Mimics skin's natural sebum.", tags:[] },
+  "sodium hyaluronate":{ flag:"ok", label:"Sodium Hyaluronate", reason:"Smaller molecule form of hyaluronic acid — deeper hydration.", tags:[] },
+  "dimethicone":{ flag:"ok", label:"Dimethicone", reason:"Silicone film-former. Non-comedogenic on skin but can cause build-up on hair.", tags:["silicone"] },
+
+  /* ── MAKEUP-SPECIFIC ─────────────────────────────── */
+  "bismuth oxychloride":{ flag:"caution", label:"Bismuth Oxychloride", reason:"Gives cosmetics a pearlescent finish but its crystalline structure can clog pores and trigger cystic acne in acne-prone skin.", tags:["comedogenic","makeup"] },
+  "carmine":{ flag:"caution", label:"Carmine (CI 75470)", reason:"Red pigment derived from crushed insects. Can cause allergic contact dermatitis. Not vegan.", tags:["allergen","makeup"] },
+  "ci 75470":{ flag:"caution", label:"Carmine (CI 75470)", reason:"Insect-derived red pigment (cochineal). Allergic reactions possible, especially in asthma or aspirin-sensitive individuals.", tags:["allergen","makeup"] },
+  "talc":{ flag:"caution", label:"Talc", reason:"Used in powders and eyeshadows. Concerns over asbestos contamination in low-grade talc; pore-clogging for some. Look for cosmetic-grade tested talc.", tags:["makeup","caution"] },
+  "isopropyl myristate":{ flag:"caution", label:"Isopropyl Myristate", reason:"Emollient used in foundations and primers. Highly comedogenic — rated 5/5 on the comedogenicity scale. Can cause clogged pores and breakouts.", tags:["comedogenic","makeup"] },
+  "isopropyl palmitate":{ flag:"caution", label:"Isopropyl Palmitate", reason:"Comedogenic emollient (rated 4/5). Frequently found in foundations and primers.", tags:["comedogenic"] },
+  "lanolin":{ flag:"caution", label:"Lanolin", reason:"Sheep-derived wax. Effective moisturiser but one of the top causes of cosmetic contact allergy. Avoid if you react to wool.", tags:["allergen"] },
+  "lanolin alcohol":{ flag:"caution", label:"Lanolin Alcohol", reason:"Sheep-derived. Higher allergenicity than lanolin itself — more likely to cause contact dermatitis.", tags:["allergen"] },
+  "coal tar":{ flag:"allergen", label:"Coal Tar", reason:"Used in some dandruff/psoriasis products and hair dyes. Classified as a potential human carcinogen by IARC. Restricted in EU.", tags:["allergen","haircare"] },
+  "bht":{ flag:"caution", label:"BHT (Butylated Hydroxytoluene)", reason:"Synthetic antioxidant preservative. Possible endocrine disruption and tumour-promotion concerns at high doses.", tags:["caution"] },
+  "bha":{ flag:"caution", label:"BHA (Butylated Hydroxyanisole)", reason:"Synthetic antioxidant. Listed as a possible carcinogen by IARC. Restricted in EU for some uses.", tags:["caution"] },
+  "butylated hydroxyanisole":{ flag:"caution", label:"BHA (Butylated Hydroxyanisole)", reason:"Synthetic antioxidant. Possible carcinogen (IARC Group 2B). EU restricts concentration.", tags:["caution"] },
+  "butylated hydroxytoluene":{ flag:"caution", label:"BHT (Butylated Hydroxytoluene)", reason:"Synthetic preservative antioxidant. Endocrine disruption and carcinogenicity concerns at high exposure.", tags:["caution"] },
+  "d&c red 33":{ flag:"caution", label:"D&C Red 33", reason:"Synthetic azo dye used in lipsticks and blushes. Can cause contact sensitivity in some people.", tags:["makeup","dye"] },
+  "d&c red 36":{ flag:"caution", label:"D&C Red 36", reason:"Insoluble azo pigment. Not approved for use near eyes. Possible skin sensitiser.", tags:["makeup","dye"] },
+  "d&c red 27":{ flag:"caution", label:"D&C Red 27", reason:"Fluorescent dye. May cause photosensitivity. Restricted for eye-area use.", tags:["makeup","dye"] },
+  "fd&c yellow 5":{ flag:"caution", label:"FD&C Yellow 5 (Tartrazine)", reason:"Azo dye. Allergic reactions including hives and breathing difficulty, especially in aspirin-sensitive people.", tags:["allergen","dye"] },
+  "fd&c blue 1":{ flag:"caution", label:"FD&C Blue 1 (Brilliant Blue)", reason:"Synthetic dye. Generally considered low-risk but can cause hypersensitivity in sensitive individuals.", tags:["dye","caution"] },
+  "d&c orange 4":{ flag:"caution", label:"D&C Orange 4", reason:"Synthetic coal-tar dye. Not approved for use in products applied near the eye.", tags:["makeup","dye"] },
+  "mica":{ flag:"ok", label:"Mica (CI 77019)", reason:"Natural mineral used to add shimmer and pigment to makeup. Considered safe by most regulatory bodies.", tags:["makeup"] },
+  "ci 77019":{ flag:"ok", label:"Mica (CI 77019)", reason:"Natural mineral pigment. Provides shimmer. Well-tolerated; safe for most skin types.", tags:["makeup"] },
+  "iron oxides":{ flag:"ok", label:"Iron Oxides", reason:"Mineral pigments (CI 77491/77492/77499) used to create red, yellow, and black shades in makeup. Considered very safe.", tags:["makeup"] },
+  "ci 77491":{ flag:"ok", label:"Iron Oxide Red (CI 77491)", reason:"Mineral pigment used in foundations, blushes, eye shadows. Very safe and widely used.", tags:["makeup"] },
+  "ci 77492":{ flag:"ok", label:"Iron Oxide Yellow (CI 77492)", reason:"Mineral pigment for yellow/golden shades in makeup. Very safe.", tags:["makeup"] },
+  "ci 77499":{ flag:"ok", label:"Iron Oxide Black (CI 77499)", reason:"Mineral pigment used in eyeliners and mascaras. Considered very safe.", tags:["makeup"] },
+  "ci 77891":{ flag:"ok", label:"Titanium Dioxide (CI 77891)", reason:"Mineral sunscreen and white pigment used in foundations and sunscreens. Very safe topically.", tags:["makeup"] },
+  "kaolin":{ flag:"ok", label:"Kaolin (White Clay)", reason:"Gentle clay that absorbs oil and mattifies skin. Ideal for oily and sensitive skin.", tags:[] },
+  "bentonite":{ flag:"ok", label:"Bentonite Clay", reason:"Highly absorbent clay. Draws out impurities — excellent in masks. Safe for most skin types.", tags:[] },
+  "shellac":{ flag:"caution", label:"Shellac", reason:"Resin secreted by lac bugs. Used in nail polishes and some lip products. Not vegan; rare allergen.", tags:["caution"] },
+  "mineral oil":{ flag:"caution", label:"Mineral Oil", reason:"Petroleum-derived occlusive. Rated 2/5 for comedogenicity. Creates a film that may trap bacteria in acne-prone skin.", tags:["comedogenic"] },
+  "petrolatum":{ flag:"ok", label:"Petrolatum (Petroleum Jelly)", reason:"Highly effective occlusive moisturiser. When highly refined (cosmetic grade), very safe and non-sensitising.", tags:[] },
+  "aluminium chlorohydrate":{ flag:"caution", label:"Aluminium Chlorohydrate", reason:"Active ingredient in antiperspirants. Concerns over aluminium accumulation; some studies suggest potential links to breast tissue — evidence is not conclusive.", tags:["caution","bodycare"] },
+  "hydroquinone":{ flag:"allergen", label:"Hydroquinone", reason:"Powerful skin-lightening agent. Banned in EU cosmetics. Associated with ochronosis (blue-black skin discolouration) with prolonged use.", tags:["allergen"] },
+
+  /* ── HAIRCARE-SPECIFIC ───────────────────────────── */
+  "p-phenylenediamine":{ flag:"allergen", label:"PPD (p-Phenylenediamine)", reason:"Primary allergen in permanent hair dyes. Can cause severe allergic contact dermatitis, even anaphylaxis. Mandatory patch test 48hrs before use.", tags:["allergen","haircare"] },
+  "paraphenylenediamine":{ flag:"allergen", label:"PPD (p-Phenylenediamine)", reason:"Potent allergen in dark hair dyes. Cross-reacts with PABA, sulfonamides. EU requires patch test warning on pack.", tags:["allergen","haircare"] },
+  "ammonium persulfate":{ flag:"allergen", label:"Ammonium Persulfate", reason:"Oxidising agent in hair bleach/lighteners. Can cause occupational asthma, contact urticaria, and anaphylaxis.", tags:["allergen","haircare"] },
+  "potassium persulfate":{ flag:"caution", label:"Potassium Persulfate", reason:"Hair bleach oxidiser. Similar sensitisation risk to ammonium persulfate.", tags:["caution","haircare"] },
+  "ammonium thioglycolate":{ flag:"caution", label:"Ammonium Thioglycolate", reason:"Key ingredient in permanent waves/perms. Can cause chemical burns, hair breakage, and sensitisation.", tags:["irritant","haircare"] },
+  "sodium hydroxide":{ flag:"caution", label:"Sodium Hydroxide (Lye)", reason:"Strong alkali used in hair relaxers and depilatory creams. Can cause serious chemical burns if used incorrectly.", tags:["irritant","haircare"] },
+  "resorcinol":{ flag:"caution", label:"Resorcinol", reason:"Coupler in oxidative hair dyes. Skin sensitiser and potential endocrine disruptor. EU restricts maximum concentration.", tags:["caution","haircare"] },
+  "cyclopentasiloxane":{ flag:"caution", label:"Cyclopentasiloxane (D5)", reason:"Volatile silicone used in hair products. Builds up on hair over time. EU has restricted its use in wash-off products due to environmental concerns.", tags:["silicone","haircare"] },
+  "cyclomethicone":{ flag:"caution", label:"Cyclomethicone", reason:"Volatile silicone blend (D4/D5). Provides slip and heat protection but accumulates and is environmentally persistent.", tags:["silicone","haircare"] },
+  "cyclotetrasiloxane":{ flag:"caution", label:"Cyclotetrasiloxane (D4)", reason:"Volatile silicone. EU SVHC (Substance of Very High Concern) — potential endocrine disruptor. Restricted in wash-off products.", tags:["silicone","haircare"] },
+  "dimethicone copolyol":{ flag:"ok", label:"Dimethicone Copolyol", reason:"Water-soluble silicone. Conditions and detangles without as much build-up as standard dimethicone.", tags:["silicone","haircare"] },
+  "hydrogen peroxide":{ flag:"caution", label:"Hydrogen Peroxide", reason:"Oxidising developer used in hair colour and bleach. At cosmetic concentrations, can damage the hair cuticle and irritate scalp with repeated use.", tags:["caution","haircare"] },
+  "sodium thiosulfate":{ flag:"ok", label:"Sodium Thiosulfate", reason:"Used in some hair relaxers. Generally considered safe at cosmetic concentrations.", tags:["haircare"] },
+  "polyquaternium-11":{ flag:"ok", label:"Polyquaternium-11", reason:"Conditioning polymer used in hair products. Gives softness and manageability. Well-tolerated.", tags:["haircare"] },
+  "polyquaternium-7":{ flag:"ok", label:"Polyquaternium-7", reason:"Cationic conditioning agent. Improves detangling and reduces static. Generally safe.", tags:["haircare"] },
+
+  /* ── BODYCARE ────────────────────────────────────── */
+  "triclosan":{ flag:"allergen", label:"Triclosan", reason:"Antibacterial agent. Banned in US OTC antiseptic products (FDA 2016). Endocrine disruption concerns; contributes to antibiotic resistance.", tags:["allergen","bodycare"] },
+  "triclocarban":{ flag:"caution", label:"Triclocarban", reason:"Antibacterial used in bar soaps. Also banned in US OTC antiseptics (FDA 2016) due to safety concerns.", tags:["caution","bodycare"] },
+  "benzophenone-4":{ flag:"caution", label:"Benzophenone-4", reason:"UV filter used in hairsprays and some sunscreens. Potential endocrine disruptor. Restricted in some countries.", tags:["caution"] },
+  "dibutyl phthalate":{ flag:"allergen", label:"DBP (Dibutyl Phthalate)", reason:"Plasticiser used in nail polish. Endocrine disruptor. Banned in EU cosmetics.", tags:["allergen"] },
+  "diethyl phthalate":{ flag:"caution", label:"DEP (Diethyl Phthalate)", reason:"Often used as a fragrance solvent. Endocrine disruption concerns. Avoid during pregnancy.", tags:["caution"] },
+
+  /* ── SAFE / BENEFICIAL (EXTENDED) ───────────────── */
+  "argan oil":{ flag:"ok", label:"Argan Oil", reason:"Rich in Vitamin E and fatty acids. Nourishing, non-comedogenic. Excellent for dry and mature skin.", tags:[] },
+  "argania spinosa kernel oil":{ flag:"ok", label:"Argan Oil (Argania Spinosa)", reason:"Pure argan oil. Lightweight and nourishing for skin and hair.", tags:[] },
+  "rosehip oil":{ flag:"ok", label:"Rosehip Oil", reason:"High in vitamin C and trans-retinoic acid. Fades scars, hyperpigmentation, and fine lines.", tags:[] },
+  "rosa canina fruit oil":{ flag:"ok", label:"Rosehip Oil", reason:"Rich in antioxidants and fatty acids. Anti-aging and brightening.", tags:[] },
+  "propylene glycol":{ flag:"caution", label:"Propylene Glycol", reason:"Humectant and solvent. Generally safe but can cause irritation and contact dermatitis in concentrations above 5%.", tags:["caution"] },
+  "butylene glycol":{ flag:"ok", label:"Butylene Glycol", reason:"Lightweight humectant and solvent. Well-tolerated; less irritating than propylene glycol.", tags:[] },
+  "xanthan gum":{ flag:"ok", label:"Xanthan Gum", reason:"Natural thickener and stabiliser. Very safe; suitable for sensitive skin.", tags:[] },
+  "carbomer":{ flag:"ok", label:"Carbomer", reason:"Synthetic thickener giving gels their texture. Considered safe at cosmetic concentrations.", tags:[] },
+  "adenosine":{ flag:"ok", label:"Adenosine", reason:"Naturally derived anti-aging active. Reduces fine lines and firms skin. Excellent tolerability.", tags:[] },
+  "beta-glucan":{ flag:"ok", label:"Beta-Glucan", reason:"Powerfully hydrating polysaccharide — holds moisture even better than hyaluronic acid. Soothing and barrier-supportive.", tags:[] },
+  "bakuchiol":{ flag:"ok", label:"Bakuchiol", reason:"Plant-based retinol alternative from babchi seeds. Provides retinol-like anti-aging benefits without irritation.", tags:[] },
+  "tranexamic acid":{ flag:"ok", label:"Tranexamic Acid", reason:"Brightens hyperpigmentation and melasma. Gentler alternative to kojic acid. Well-tolerated.", tags:[] },
+  "azelaic acid":{ flag:"ok", label:"Azelaic Acid", reason:"Anti-inflammatory brightener. Effective on acne, rosacea, and PIH with minimal irritation. Safe in pregnancy.", tags:[] },
+  "kojic acid":{ flag:"caution", label:"Kojic Acid", reason:"Skin-lightening ingredient derived from fungi. Can cause contact dermatitis and irritation. Some countries restrict concentration.", tags:["caution"] },
+  "copper tripeptide-1":{ flag:"ok", label:"Copper Tripeptide-1 (GHK-Cu)", reason:"Skin-regenerating peptide. Boosts collagen, reduces inflammation, speeds wound healing.", tags:[] },
+  "sodium pca":{ flag:"ok", label:"Sodium PCA", reason:"Natural moisturising factor found in skin. Excellent humectant — maintains skin's water balance.", tags:[] },
+  "tremella fuciformis":{ flag:"ok", label:"Snow Mushroom (Tremella)", reason:"Holds moisture even more effectively than hyaluronic acid. Deeply plumping and soothing.", tags:[] },
+  "cetearyl alcohol":{ flag:"ok", label:"Cetearyl Alcohol", reason:"Fatty alcohol emulsifier — NOT a drying alcohol. Conditions and thickens formulas. Safe for most skin types.", tags:[] },
+  "cetyl alcohol":{ flag:"ok", label:"Cetyl Alcohol", reason:"Fatty alcohol. Emollient and emulsifier. Non-drying. Generally very well tolerated.", tags:[] },
+  "stearic acid":{ flag:"ok", label:"Stearic Acid", reason:"Fatty acid emulsifier and thickener. Skin-restoring and gentle. Non-comedogenic.", tags:[] },
+  "palmitoyl tripeptide-1":{ flag:"ok", label:"Palmitoyl Tripeptide-1", reason:"Peptide that stimulates collagen production. Anti-aging with minimal irritation.", tags:[] },
+  "palmitoyl tetrapeptide-7":{ flag:"ok", label:"Palmitoyl Tetrapeptide-7", reason:"Anti-inflammatory peptide. Pairs with Palmitoyl Tripeptide-1 in many anti-aging formulas.", tags:[] },
+  "acetyl hexapeptide-3":{ flag:"ok", label:"Acetyl Hexapeptide-3 (Argireline)", reason:"'Botox peptide' — relaxes facial tension to reduce expression lines. Safe and effective.", tags:[] },
+  "resveratrol":{ flag:"ok", label:"Resveratrol", reason:"Antioxidant from grapes. Anti-aging and protective. Enhances retinol's effectiveness.", tags:[] },
+  "ferulic acid":{ flag:"ok", label:"Ferulic Acid", reason:"Antioxidant that dramatically boosts the stability and effectiveness of Vitamins C and E.", tags:[] },
+  "alpha arbutin":{ flag:"ok", label:"Alpha-Arbutin", reason:"Gentle skin brightener. Inhibits melanin production safely. Effective for hyperpigmentation.", tags:[] },
+  "sodium ascorbyl phosphate":{ flag:"ok", label:"Sodium Ascorbyl Phosphate (Vitamin C)", reason:"Stable, water-soluble Vitamin C derivative. Brightens and protects. Gentler than L-ascorbic acid.", tags:[] },
+  "ascorbyl glucoside":{ flag:"ok", label:"Ascorbyl Glucoside (Vitamin C)", reason:"Stable Vitamin C derivative converted to L-ascorbic acid in skin. Brightening and antioxidant.", tags:[] },
+  "lactic acid":{ flag:"ok", label:"Lactic Acid (AHA)", reason:"Gentle AHA exfoliant. Hydrating while smoothing texture. Suitable for sensitive skin.", tags:[] },
+  "mandelic acid":{ flag:"ok", label:"Mandelic Acid (AHA)", reason:"Large-molecule AHA — slowest penetration, therefore gentlest exfoliant. Ideal for sensitive skin.", tags:[] },
+  "polyhydroxy acid":{ flag:"ok", label:"PHAs (Polyhydroxy Acids)", reason:"Gentlest class of chemical exfoliants. Anti-aging, hydrating, and suitable for rosacea-prone skin.", tags:[] },
+  "gluconolactone":{ flag:"ok", label:"Gluconolactone (PHA)", reason:"Gentle polyhydroxy acid exfoliant with antioxidant and humectant properties. Excellent for sensitive skin.", tags:[] },
+};
+
+const _UNUSED = {
+  "snail secretion filtrate":{ label:"Snail Mucin", benefit:"K-beauty legend. Repairs barrier, fades scars, deeply hydrates — works for nearly every skin type.", icon:"🐌" },
+  "snail mucin":{ label:"Snail Mucin", benefit:"K-beauty legend. Repairs barrier, fades scars, deeply hydrates — works for nearly every skin type.", icon:"🐌" },
+  "galactomyces ferment filtrate":{ label:"Galactomyces Ferment", benefit:"A K-beauty staple (think COSRX, SK-II). Brightens, refines pores, and evens texture with regular use.", icon:"✨" },
+  "galactomyces":{ label:"Galactomyces", benefit:"Fermented yeast extract. Brightens skin and minimises pores — a cult K-beauty ingredient.", icon:"✨" },
+  "bifida ferment lysate":{ label:"Bifida Ferment Lysate", benefit:"Probiotic-derived ingredient that strengthens the skin's microbiome and barrier. Beloved in K-beauty.", icon:"🌿" },
+  "lactobacillus ferment":{ label:"Lactobacillus Ferment", benefit:"Probiotic ingredient. Balances skin's microbiome, reduces sensitivity and redness.", icon:"🌿" },
+  "saccharomyces ferment":{ label:"Saccharomyces Ferment", benefit:"Fermented extract that brightens and smooths texture. Common in premium K-beauty serums.", icon:"✨" },
+  "centella asiatica":{ label:"Centella Asiatica (Cica)", benefit:"The holy grail of K-beauty. Calms redness, repairs barrier, and soothes inflammation — especially popular for acne-prone skin.", icon:"🍃" },
+  "centella asiatica extract":{ label:"Cica Extract", benefit:"Concentrated centella — the backbone of K-beauty 'cica' products. Intensely soothing.", icon:"🍃" },
+  "asiaticoside":{ label:"Asiaticoside", benefit:"Active compound from centella asiatica. Boosts collagen and speeds up wound healing.", icon:"🍃" },
+  "madecassoside":{ label:"Madecassoside", benefit:"Potent centella derivative. One of the most effective skin-calming actives in K-beauty.", icon:"🍃" },
+  "rice extract":{ label:"Rice Extract", benefit:"Traditional Korean beauty staple. Brightens and evens skin tone, packed with vitamins B and E.", icon:"🌾" },
+  "rice ferment filtrate":{ label:"Fermented Rice Water", benefit:"Centuries-old Korean beauty secret. Brightens, tightens pores, and smooths texture.", icon:"🌾" },
+  "oryza sativa":{ label:"Rice (Oryza Sativa)", benefit:"Rice-derived ingredient — brightening and soothing. A classic in Korean and Japanese skincare.", icon:"🌾" },
+  "adenosine":{ label:"Adenosine", benefit:"K-beauty anti-ageing staple. Reduces fine lines and firms skin — you'll find it in almost every Korean serum.", icon:"💎" },
+  "propolis extract":{ label:"Propolis Extract", benefit:"Antibacterial and antioxidant-rich bee extract. K-beauty uses it to calm breakouts and boost glow.", icon:"🍯" },
+  "propolis":{ label:"Propolis", benefit:"Antibacterial and antioxidant-rich bee extract. K-beauty uses it to calm breakouts and boost glow.", icon:"🍯" },
+  "beta-glucan":{ label:"Beta-Glucan", benefit:"Deeply hydrating and soothing — often called 'hyaluronic acid's smarter cousin' in K-beauty circles.", icon:"💧" },
+  "sea buckthorn":{ label:"Sea Buckthorn", benefit:"Packed with omegas and vitamin C. Brightening and healing — trending in Korean skincare.", icon:"🌊" },
+  "mugwort extract":{ label:"Mugwort (Artemisia)", benefit:"Traditional Korean medicinal herb. Calms sensitive, acne-prone and inflamed skin — a rising K-beauty star.", icon:"🌿" },
+  "artemisia":{ label:"Artemisia (Mugwort)", benefit:"Traditional Korean herb beloved for calming redness and sensitivity. Popular in K-beauty for reactive skin.", icon:"🌿" },
+  "green tea extract":{ label:"Green Tea Extract", benefit:"Antioxidant powerhouse used widely in K-beauty. Protects from UV damage and soothes inflammation.", icon:"🍵" },
+  "camellia sinensis":{ label:"Green Tea (Camellia Sinensis)", benefit:"Rich in catechins and antioxidants. K-beauty staple for protection against environmental stress.", icon:"🍵" },
+  "licorice root extract":{ label:"Licorice Root Extract", benefit:"One of K-beauty's favourite brighteners. Fades dark spots and hyperpigmentation gently over time.", icon:"🌱" },
+  "glycyrrhiza glabra":{ label:"Licorice Root", benefit:"Depigmenting and anti-inflammatory. A K-beauty go-to for brightening without irritation.", icon:"🌱" },
+  "niacinamide":{ label:"Niacinamide", benefit:"A cornerstone of K-beauty. Minimises pores, fades dark spots, and regulates sebum — universally loved.", icon:"⚡" },
+  "polyglutamic acid":{ label:"Polyglutamic Acid (PGA)", benefit:"K-beauty's next-gen hydrator — holds 4× more moisture than hyaluronic acid. Big in Korean lab skincare.", icon:"💧" },
+  "ceramide":{ label:"Ceramides", benefit:"Essential barrier lipids — K-beauty brands pioneered ceramide-heavy formulas for glass skin.", icon:"🛡️" },
+  "tranexamic acid":{ label:"Tranexamic Acid", benefit:"K-beauty's answer to melasma and pigmentation. Gentler than kojic acid, visibly brightening.", icon:"✨" },
+  "azelaic acid":{ label:"Azelaic Acid", benefit:"Trending in K-beauty for its ability to fade PIH and calm rosacea without irritation.", icon:"🌸" },
+  "bakuchiol":{ label:"Bakuchiol", benefit:"Plant-based retinol alternative — gaining major traction in K-beauty for gentle anti-ageing.", icon:"🌿" },
+  "copper tripeptide":{ label:"Copper Tripeptide-1 (GHK-Cu)", benefit:"Peptide used in premium Korean skincare. Boosts collagen and helps skin self-repair.", icon:"💎" },
+  "sodium pca":{ label:"Sodium PCA", benefit:"Natural moisturising factor found in skin — Korean toners use it for instant hydration without heaviness.", icon:"💧" },
+  "tremella fuciformis":{ label:"Snow Mushroom (Tremella)", benefit:"K-beauty's favourite mushroom. Holds more moisture than hyaluronic acid and plumps beautifully.", icon:"🍄" },
+  "witch hazel":{ label:"Witch Hazel", benefit:"Pore-tightening astringent. Used in lighter K-beauty toners for oily and acne-prone skin.", icon:"🌿" },
+  "hyaluronic acid":{ label:"Hyaluronic Acid", benefit:"The hydration hero. K-beauty double and triple layers this across toners, essences and serums for glass skin.", icon:"💧" },
+  "squalane":{ label:"Squalane", benefit:"Lightweight oil loved in K-beauty for its non-greasy finish. Mimics skin's own sebum perfectly.", icon:"✨" },
+};
+
+/* CI number → INCI name lookup for ingredient matching */
+const CI_LOOKUP = {
+  "ci 75470":"carmine","ci 77019":"mica","ci 77891":"titanium dioxide",
+  "ci 77491":"iron oxides","ci 77492":"iron oxides","ci 77499":"iron oxides",
+  "ci 77007":"ultramarines","ci 77742":"manganese violet","ci 77510":"ferric ferrocyanide",
+  "ci 19140":"fd&c yellow 5","ci 42090":"fd&c blue 1","ci 15985":"fd&c yellow 6",
+  "ci 16035":"fd&c red 40","ci 45410":"d&c red 27","ci 17200":"d&c red 33",
+  "ci 12085":"d&c red 36","ci 45380":"d&c red 22","ci 15850":"d&c red 6",
+};
+
+const MAKEUP_STEPS = [
+  { id:"primer_mk", icon:"✨", name:"Primer / SPF Base", tip:"Let it set 2 mins before foundation" },
+  { id:"foundation_mk", icon:"💄", name:"Foundation", tip:"Blend with a damp sponge for a flawless finish" },
+  { id:"concealer_mk", icon:"🪄", name:"Concealer", tip:"Set with powder to avoid creasing" },
+  { id:"colour_mk", icon:"🌸", name:"Blush & Contour", tip:"Build slowly — blend in circular motions" },
+  { id:"eyes_mk", icon:"👁️", name:"Eye Makeup", tip:"Shadow first, then liner, then mascara" },
+  { id:"lips_mk", icon:"💋", name:"Lip Colour", tip:"Use liner first for longevity" },
+  { id:"setting_mk", icon:"🌟", name:"Setting Spray", tip:"Lock your look — 2–3 spritzes from 30cm" },
+];
+
+const AM_STEPS = [
+  { id:"cleanse_am", icon:"🧼", name:"Gentle Cleanser", tip:"30 seconds with lukewarm water" },
+  { id:"toner_am", icon:"💧", name:"Toner / Essence", tip:"Pat gently, never rub" },
+  { id:"serum_am", icon:"⚡", name:"Serum", tip:"Vitamin C or Niacinamide — wait 30 sec" },
+  { id:"moisturizer_am", icon:"🫧", name:"Moisturizer", tip:"Apply to slightly damp skin" },
+  { id:"spf_am", icon:"☀️", name:"SPF 30+", tip:"Last step, every morning — no exceptions" },
+];
+
+const PM_STEPS = [
+  { id:"oil_cleanse", icon:"🌙", name:"Oil / Micellar Cleanser", tip:"Remove SPF and makeup first" },
+  { id:"water_cleanse", icon:"🧼", name:"Water-Based Cleanser", tip:"Second cleanse for truly clean skin" },
+  { id:"actives", icon:"🔬", name:"Actives (Retinol / AHA / BHA)", tip:"Alternate nights — don't layer" },
+  { id:"moisturizer_pm", icon:"🛡️", name:"Rich Night Moisturizer", tip:"Seal everything in" },
+];
+
+const SKIN_OPTIONS = ["Glowing ✨","Clear 💎","Oily 🫧","Dry 🌵","Breakouts 😤","Sensitive 🌹","Redness 🍓","Dull ☁️","Puffy 🫠","Balanced ⚖️"];
+
+const AGE_GROUPS = [
+  { id:"teen", label:"Under 20", tip:"Focus on gentle, non-comedogenic products to manage breakouts without stripping your barrier. A simple routine wins: cleanser → moisturizer → SPF. Avoid heavy actives like retinol for now.", icon:"🌱" },
+  { id:"twenties", label:"20s", tip:"Prevention is your superpower. Layer in antioxidants (Vitamin C in the AM), SPF every single day, and a lightweight hyaluronic serum. Niacinamide is your best friend for pores and evenness.", icon:"✨" },
+  { id:"thirties", label:"30s", tip:"Now's the time to introduce retinol (start 2× a week at night) and peptides. Double down on SPF and add a richer night moisturizer. Eye cream with caffeine helps with early fine lines.", icon:"🌸" },
+  { id:"forties", label:"40s", tip:"Prioritise barrier repair — ceramides, squalane, peptides. Retinol is a must if you're not using it. Look for products with growth factors or bakuchiol. Rich moisturizers at night, SPF 50 every day.", icon:"💎" },
+  { id:"fiftyplus", label:"50s+", tip:"Skin gets thinner and drier — lean into nourishing oils, ceramide-heavy creams, and collagen-supporting peptides. Gentle exfoliation (once a week) keeps skin luminous. Hydration is everything.", icon:"👑" },
+];
+
+let S = { name:"", age:"", selectedAllergens:[], customAllergens:[], scans:[], scanCount:0, isPro:false, streak:0, lastLogDate:"", routineLog:{}, notifOn:false, skinLogs:[], theme:"blush", amSteps:null, pmSteps:null, makeupEnabled:false, makeupSteps:null, trackerTab:"skincare" };
+
+/* ── PALETTE DATA ──────────────────────────────────────── */
+const THEMES = [
+  // Left column (top → bottom)
+  { id:'peach',    name:'Peach',    col:'L',
+    shimmer:'linear-gradient(135deg,#ffe8d8 0%,#e09868 55%,#ffd8c0 100%)',
+    glow:'rgba(208,112,64,0.55)' },
+  { id:'berry',    name:'Berry',    col:'L',
+    shimmer:'linear-gradient(135deg,#ffd0e0 0%,#e06898 55%,#ffc8d8 100%)',
+    glow:'rgba(192,32,96,0.55)' },
+  // Center column — heart (top), oval (bottom)
+  { id:'blush',    name:'Blush',    col:'C', pos:'heart',
+    shimmer:'linear-gradient(135deg,#fce8f0 0%,#eba8bc 55%,#fce0ee 100%)',
+    glow:'rgba(196,97,122,0.55)' },
+  { id:'lavender', name:'Lavender', col:'C', pos:'oval',
+    shimmer:'linear-gradient(135deg,#f0e8ff 0%,#c0a0e8 55%,#e8e0ff 100%)',
+    glow:'rgba(140,80,200,0.55)' },
+  // Right column (top → bottom)
+  { id:'cloud',    name:'Cloud',    col:'R',
+    shimmer:'linear-gradient(135deg,#fafaf8 0%,#cac2b8 55%,#f5f3f0 100%)',
+    glow:'rgba(150,130,110,0.45)' },
+  { id:'midnight', name:'Midnight', col:'R',
+    shimmer:'linear-gradient(135deg,#6a4080 0%,#a878c8 55%,#4a2060 100%)',
+    glow:'rgba(130,80,200,0.55)' },
+];
+
+let paletteOpen = false;
+
+function togglePalette(){
+  paletteOpen = !paletteOpen;
+  document.getElementById('palette-compact').classList.toggle('open', paletteOpen);
+  document.getElementById('palette-lid-hint').textContent = paletteOpen ? 'tap to close' : 'tap to open';
+}
+
+function applyTheme(id){
+  S.theme = id || 'blush';
+  document.documentElement.dataset.theme = S.theme === 'blush' ? '' : S.theme;
+  saveState();
+  renderPalette();
+  if(paletteOpen) setTimeout(togglePalette, 480);
+}
+
+function renderPalette(){
+  const el = document.getElementById('palette-pans'); if(!el) return;
+  const cur = S.theme || 'blush';
+  const inSh = 'inset 0 2px 6px rgba(255,255,255,0.55),inset 0 -2px 6px rgba(0,0,0,0.1)';
+
+  function frame(t, shape){
+    const sel = t.id === cur;
+    const ring = sel
+      ? `0 0 0 2.5px rgba(255,255,255,0.65),0 0 16px ${t.glow},0 2px 8px rgba(0,0,0,0.12)`
+      : '0 2px 6px rgba(0,0,0,0.08)';
+    const sc = sel ? 'scale(1.08)' : 'scale(1)';
+    const mark = sel ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(255,255,255,0.92);text-shadow:0 1px 4px rgba(0,0,0,0.45);pointer-events:none;">✦</div>` : '';
+    const shimmerOverlay = `<div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.38) 0%,transparent 50%,rgba(0,0,0,0.05) 100%);pointer-events:none;border-radius:inherit;"></div>`;
+
+    let panInner = '';
+    let framePad = '5px';
+    let frameRadius = '8px';
+
+    if(shape === 'heart'){
+      // Heart pan + heart-ish frame
+      panInner = `<div style="width:58px;height:54px;position:relative;overflow:visible;">
+        <div style="position:absolute;inset:0;background:${t.shimmer};
+          clip-path:path('M 29 52 C 8 37 0 22 0 15 C 0 4 9 0 16 0 C 22 0 29 6 29 6 C 29 6 36 0 42 0 C 49 0 58 4 58 15 C 58 22 50 37 29 52Z');
+          ${inSh};">
+          ${shimmerOverlay}${mark}
+        </div>
+      </div>`;
+      frameRadius = '50% 50% 38% 38% / 55% 55% 38% 38%';
+      framePad = '6px 6px 8px';
+    } else if(shape === 'oval'){
+      panInner = `<div style="width:66px;height:48px;border-radius:50%;background:${t.shimmer};position:relative;overflow:hidden;box-shadow:${inSh};">${shimmerOverlay}${mark}</div>`;
+      frameRadius = '50%';
+      framePad = '5px';
+    } else {
+      panInner = `<div style="width:66px;height:44px;border-radius:4px;background:${t.shimmer};position:relative;overflow:hidden;box-shadow:${inSh};">${shimmerOverlay}${mark}</div>`;
+    }
+
+    return `<div onclick="applyTheme('${t.id}')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;">
+      <div style="padding:${framePad};border-radius:${frameRadius};
+        background:linear-gradient(135deg,var(--palette-frame2),var(--palette-frame),var(--palette-dark));
+        box-shadow:${ring};transition:all 0.25s;transform:${sc};
+        display:flex;align-items:center;justify-content:center;position:relative;">
+        ${panInner}
+      </div>
+      <span style="font-size:8.5px;color:var(--palette-dark);font-weight:700;letter-spacing:0.3px;font-family:'DM Sans',sans-serif;">${t.name}</span>
+    </div>`;
+  }
+
+  const L = THEMES.filter(t=>t.col==='L');
+  const C = THEMES.filter(t=>t.col==='C');
+  const R = THEMES.filter(t=>t.col==='R');
+
+  el.innerHTML = `<div style="display:flex;justify-content:center;align-items:center;gap:10px;padding:14px 14px 10px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">${L.map(t=>frame(t,'rect')).join('')}</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">${[frame(C[0],'heart'),frame(C[1],'oval')].join('')}</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">${R.map(t=>frame(t,'rect')).join('')}</div>
+  </div>`;
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  loadState();
+  applyTheme(S.theme||'blush');
+  if(S.name) document.getElementById('profile-name').value=S.name;
+  renderAllergenGrid(); renderCustomTags(); updateScanBar();
+  renderTrackerSteps(); renderSkinButtons(); updateStreak(); renderWeeklyProgress(); renderWings();
+  updateSubStatus(); updateHistoryScreen(); updateNotifUI();
+  renderAgeGroups(); renderPalette();
+});
+
+function updateScanBar(){
+  const left=Math.max(0,FREE_SCAN_LIMIT-S.scanCount);
+  document.getElementById('scans-left').textContent=S.isPro?'∞':left;
+  const dots=document.getElementById('scan-dots');
+  if(S.isPro){
+    dots.innerHTML=`<span style="font-size:11px;color:var(--pink-deep);font-weight:700;">Pro — Unlimited ♡</span>`;
+    document.querySelector('.scan-count-bar .left').textContent='Pro member';
+  } else {
+    dots.innerHTML=Array.from({length:FREE_SCAN_LIMIT},(_,i)=>
+      `<div class="scan-dot ${i<S.scanCount?'used':''}"></div>`).join('');
+  }
+}
+
+function tryAnalyze(){
+  if(!S.isPro&&S.scanCount>=FREE_SCAN_LIMIT){ showPaywall(); return; }
+  analyzeIngredients();
+}
+
+function analyzeIngredients(){
+  const raw=document.getElementById('ing-input').value.trim();
+  if(!raw){ showToast('Paste some ingredients first, darling ♡'); return; }
+  const overlay=document.getElementById('scan-overlay');
+  const countdown=document.getElementById('scan-countdown');
+  const msg=document.getElementById('scan-overlay-msg');
+  overlay.classList.add('show');
+  // Dramatic loading messages
+  const steps=[
+    {icon:'🔍', msg:'Scanning ingredients...'},
+    {icon:'🧬', msg:'Cross-referencing allergens...'},
+    {icon:'🏹', msg:'Checking your skin profile...'},
+    {icon:'✨', msg:'Almost ready...'},
+  ];
+  let i=0;
+  const interval=setInterval(()=>{
+    if(i<steps.length){ countdown.textContent=steps[i].icon; msg.textContent=steps[i].msg; i++; }
+  },320);
+  setTimeout(()=>{
+    clearInterval(interval);
+    S.scanCount++; saveState(); updateScanBar();
+    const results=parseIngredients(raw);
+    S._lastResult={raw,results,date:new Date().toISOString(),productName:S._pendingProductName||null};
+    S._pendingProductName=null;
+    renderResults(results);
+    overlay.classList.remove('show');
+    showScreen('results');
+    if(!S.isPro&&S.scanCount===FREE_SCAN_LIMIT) showToast('Last free scan used ♡');
+  },1500);
+}
+
+/* Normalise a raw ingredient string into a clean lookup key */
+function normaliseIngredient(raw){
+  return raw
+    .toLowerCase()
+    // Strip percentage annotations e.g. "(1-2%)" or "1%"
+    .replace(/\(?\d[\d\.\-]*\s*%\)?/g,'')
+    // Strip "[+/-]" / "±" / "[may contain]" markers
+    .replace(/\[\+\/\-\]|\[±\]|±|\+\/\-/g,'')
+    .replace(/\[may contain\]/gi,'')
+    .replace(/\bmay contain\b/gi,'')
+    // Strip "(aqua)" / "(water)" type synonyms — keep the primary name
+    .replace(/\(\s*aqua\s*\)/gi,'')
+    .replace(/\(\s*water\s*\)/gi,'')
+    // "Aqua (Water)" → just "water"
+    .replace(/\baqua\b/gi,'water')
+    // Strip trailing asterisks/notes like * ✓ †
+    .replace(/[\*†✓©®™]+/g,'')
+    // Collapse parenthetical alternate names like "(Euxyl K 400)" — keep main name
+    .replace(/\([^()]{0,40}\)/g,' ')
+    // Strip leftover punctuation clutter
+    .replace(/[|\\{}\[\]<>_~`^]/g,'')
+    .replace(/\s{2,}/g,' ')
+    .trim();
+}
+
+function lookupIngredient(norm){
+  // 1. Exact match
+  if(INGREDIENT_DB[norm]) return INGREDIENT_DB[norm];
+  // 2. CI number lookup → resolve to INCI name → try DB again
+  const ciMatch = norm.match(/ci\s*\d{4,6}/);
+  if(ciMatch){
+    const resolved = CI_LOOKUP[ciMatch[0].replace(/\s+/g,'').replace('ci','ci ')];
+    if(resolved && INGREDIENT_DB[resolved]) return INGREDIENT_DB[resolved];
+  }
+  // 3. DB key contained in ingredient string (ingredient is more specific)
+  for(const [k,v] of Object.entries(INGREDIENT_DB)){
+    if(norm.includes(k) && k.length >= 5) return v;
+  }
+  // 4. Ingredient string contained in DB key (DB key is more specific term)
+  if(norm.length >= 5){
+    for(const [k,v] of Object.entries(INGREDIENT_DB)){
+      if(k.includes(norm) && norm.length >= 5) return v;
+    }
+  }
+  return null;
+}
+
+function parseIngredients(raw){
+  // Split on commas OR newlines, but NOT on commas inside parentheses
+  const parts = [];
+  let depth=0, current='';
+  for(const ch of raw){
+    if(ch==='(') depth++;
+    else if(ch===')') depth=Math.max(0,depth-1);
+    if((ch===',' || ch==='\n') && depth===0){
+      if(current.trim()) parts.push(current.trim());
+      current='';
+    } else {
+      current+=ch;
+    }
+  }
+  if(current.trim()) parts.push(current.trim());
+
+  const userKeys=[
+    ...S.selectedAllergens.flatMap(id=>{
+      const p=ALLERGEN_PRESETS.find(x=>x.id===id); return p?p.keys:[];
+    }),
+    ...S.customAllergens.map(s=>s.toLowerCase())
+  ];
+
+  return parts
+    .map(part=>{
+      const norm = normaliseIngredient(part);
+      if(!norm || norm.length < 2) return null;
+      const entry = lookupIngredient(norm);
+      const isUserFlag = userKeys.some(u=> norm.includes(u) || u.includes(norm));
+      let flag = entry ? entry.flag : 'ok';
+      let label = entry ? entry.label : capWords(norm);
+      let reason = entry ? entry.reason : 'No specific concern data — generally considered safe.';
+      let tags = entry ? [...entry.tags] : [];
+      if(isUserFlag && flag!=='allergen'){
+        flag='allergen';
+        reason='⚠️ Matches your personal sensitivity list. '+reason;
+        if(!tags.includes('allergen')) tags.push('allergen');
+      }
+      return {raw:norm, label, flag, reason, tags};
+    })
+    .filter(Boolean);
+}
+
+function renderResults(results){
+  const flagged=results.filter(r=>r.flag==='allergen');
+  const caution=results.filter(r=>r.flag==='caution');
+  const productName=S._lastResult?.productName||null;
+
+  let icon,verdict,vClass,vSub,buyLabel,buyClass;
+  if(flagged.length>0){
+    icon='🚨'; verdict=`${flagged.length} Allergen${flagged.length>1?'s':''} Detected`;
+    vClass='danger'; buyLabel='Skip This One'; buyClass='skip';
+    vSub=`Contains ${flagged.map(f=>f.label).slice(0,2).join(', ')}${flagged.length>2?' & more':''} — flagged for your skin profile.`;
+  } else if(caution.length>0){
+    icon='⚠️'; verdict='Proceed with Caution';
+    vClass='warn'; buyLabel='Patch Test First'; buyClass='caution';
+    vSub=`${caution.length} ingredient${caution.length>1?'s':''} may irritate sensitive skin. No confirmed allergens found.`;
+  } else {
+    icon='♡'; verdict='Looks Safe for You';
+    vClass='safe'; buyLabel='Safe to Try ♡'; buyClass='buy';
+    vSub='No flagged ingredients found. Cupid approves — always patch test first, darling.';
+  }
+
+  // Orb colors per verdict
+  const orbs={ danger:['#ff4060','#a00030'], warn:['#ff9020','#804000'], safe:['#20c080','#008040'] };
+  const [c1,c2]=orbs[vClass];
+
+  document.getElementById('verdict-hero-wrap').innerHTML=`
+    <div class="verdict-hero ${vClass} verdict-pop">
+      <div class="verdict-orbs">
+        <div class="verdict-orb" style="width:200px;height:200px;background:${c1};top:-60px;left:-40px;"></div>
+        <div class="verdict-orb" style="width:150px;height:150px;background:${c2};bottom:-40px;right:-30px;"></div>
+      </div>
+      ${productName?`<div style="font-size:12px;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-weight:600;">${productName}</div>`:''}
+      <span class="verdict-icon-big">${icon}</span>
+      <div class="verdict-title">${verdict}</div>
+      <div class="verdict-sub-text">${vSub}</div>
+      <div class="verdict-buy-badge ${buyClass}">${buyLabel}</div>
+    </div>`;
+
+  const sorted=[...results.filter(r=>r.flag==='allergen'),...results.filter(r=>r.flag==='caution'),...results.filter(r=>r.flag==='ok')];
+
+  document.getElementById('result-output').innerHTML=`
+    <div style="padding:14px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);font-weight:700;" class="reveal-anim">
+      Full Ingredient Breakdown · ${results.length} ingredients
+    </div>
+    <div class="ingredient-list">
+      ${sorted.map((r,i)=>`
+        <div class="ing-row ${r.flag}" style="animation-delay:${i*0.03}s">
+          <div class="ing-dot ${r.flag}"></div>
+          <div style="flex:1;">
+            <div class="ing-name">${r.label}</div>
+            <div class="ing-reason">${r.reason}</div>
+            <div>${r.tags.map(t=>`<span class="tag ${t}">${t}</span>`).join('')}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="disclaimer reveal-anim-delay">Cupid's results are informational only. Always patch test and consult a dermatologist for confirmed allergies ♡</div>`;
+}
+
+
+function saveScan(){
+  if(!S._lastResult){ showToast('Nothing to save yet'); return; }
+  const r=S._lastResult;
+  const f=r.results.filter(x=>x.flag==='allergen');
+  const c=r.results.filter(x=>x.flag==='caution');
+  const name=prompt('Name this product, darling:','Product')||'Unnamed Product';
+  S.scans.unshift({ name, date:new Date().toISOString(), verdict:f.length>0?'danger':c.length>0?'warn':'safe', flaggedCount:f.length, cautionCount:c.length, flaggedNames:f.map(x=>x.label).slice(0,3), total:r.results.length });
+  saveState(); updateHistoryScreen(); showToast('Saved to your diary ♡');
+}
+
+function showPaywall(){ document.getElementById('paywall').classList.add('show'); }
+function dismissPaywall(){ document.getElementById('paywall').classList.remove('show'); }
+function simulateSubscribe(){ S.isPro=true; saveState(); dismissPaywall(); updateScanBar(); updateSubStatus(); showToast('Welcome to Cupid Pro ♡'); }
+
+function updateSubStatus(){
+  const el=document.getElementById('sub-status-content');
+  if(S.isPro){
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;padding:8px 0;"><span style="font-size:28px;">♡</span><div><div style="font-size:15px;font-weight:700;color:var(--pink-deep);font-family:'Playfair Display',serif;">Pro Member</div><div style="font-size:12px;color:var(--text-muted);">Unlimited scans · All features unlocked</div></div></div>`;
+  } else {
+    const left=Math.max(0,FREE_SCAN_LIMIT-S.scanCount);
+    el.innerHTML=`<p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">${left} free scan${left===1?'':'s'} remaining. Upgrade for unlimited access ♡</p><button class="btn-gold" onclick="showPaywall()">✦ Upgrade to Pro</button>`;
+  }
+}
+
+const TODAY=()=>new Date().toISOString().split('T')[0];
+
+/* ── CUSTOM RITUAL STEPS ───────────────────────────────── */
+let amEditing = false, pmEditing = false, mkEditing = false;
+
+function getSteps(period){
+  if(period==='makeup') return S.makeupSteps || MAKEUP_STEPS;
+  const key = period==='am' ? 'amSteps' : 'pmSteps';
+  const def = period==='am' ? AM_STEPS : PM_STEPS;
+  return S[key] || def;
+}
+
+function switchTrackerTab(tab){
+  S.trackerTab = tab;
+  saveState();
+  // Update tab button styles
+  document.querySelectorAll('.tracker-tab-btn').forEach(b=>{
+    const active = b.dataset.tab === tab;
+    b.style.background = active ? 'var(--pink-deep)' : 'transparent';
+    b.style.color = active ? '#fff' : 'var(--text-muted)';
+    b.style.borderColor = active ? 'var(--pink-deep)' : 'var(--border)';
+  });
+  renderTrackerSteps();
+}
+
+function enableMakeupTab(){
+  S.makeupEnabled = true;
+  S.makeupSteps = MAKEUP_STEPS.map(s=>({...s}));
+  saveState();
+  switchTrackerTab('makeup');
+}
+
+function toggleEditMode(period){
+  const key = period==='am' ? 'amSteps' : period==='pm' ? 'pmSteps' : 'makeupSteps';
+  const def = period==='am' ? AM_STEPS : period==='pm' ? PM_STEPS : MAKEUP_STEPS;
+  if(!S[key]) S[key] = def.map(s=>({...s}));
+  if(period==='am'){ amEditing=!amEditing; }
+  else if(period==='pm'){ pmEditing=!pmEditing; }
+  else { mkEditing=!mkEditing; }
+  const editing = period==='am' ? amEditing : period==='pm' ? pmEditing : mkEditing;
+  const btn = document.getElementById(`${period}-edit-btn`);
+  if(btn){ btn.textContent = editing ? '✓ Done' : '✎ Edit';
+           btn.style.color = editing ? 'var(--pink-deep)' : 'var(--text-muted)';
+           btn.style.borderColor = editing ? 'var(--pink-deep)' : 'var(--border)'; }
+  saveState(); renderTrackerSteps();
+}
+
+function addStep(period){
+  const key = period==='am' ? 'amSteps' : period==='pm' ? 'pmSteps' : 'makeupSteps';
+  const def = period==='am' ? AM_STEPS : period==='pm' ? PM_STEPS : MAKEUP_STEPS;
+  if(!S[key]) S[key] = def.map(s=>({...s}));
+  const newId = 'custom_'+period+'_'+Date.now();
+  S[key].push({ id:newId, icon:'✨', name:'', tip:'' });
+  saveState(); renderTrackerSteps();
+  setTimeout(()=>{
+    const inputs=document.querySelectorAll(`#${period}-steps input.step-name-input`);
+    if(inputs.length) inputs[inputs.length-1].focus();
+  },80);
+}
+
+function deleteStep(period, idx){
+  const key = period==='am' ? 'amSteps' : period==='pm' ? 'pmSteps' : 'makeupSteps';
+  if(!S[key]) return;
+  S[key].splice(idx,1);
+  saveState(); renderTrackerSteps();
+}
+
+function updateStepName(period, idx, val){
+  const key = period==='am' ? 'amSteps' : period==='pm' ? 'pmSteps' : 'makeupSteps';
+  if(S[key]&&S[key][idx]) S[key][idx].name=val;
+  saveState();
+}
+
+function changeStepIcon(period, idx){
+  const key = period==='am' ? 'amSteps' : period==='pm' ? 'pmSteps' : 'makeupSteps';
+  if(!S[key]) return;
+  const ic = prompt('Choose an emoji for this step ♡', S[key][idx].icon||'✨');
+  if(ic!==null){ S[key][idx].icon=ic.trim()||'✨'; saveState(); renderTrackerSteps(); }
+}
+
+function renderStepBlock(period, steps, log, editing){
+  if(editing){
+    return steps.map((s,i)=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--border);">
+        <span style="font-size:20px;cursor:pointer;flex-shrink:0;" title="tap to change"
+              onclick="changeStepIcon('${period}',${i})">${s.icon||'✨'}</span>
+        <input class="step-name-input" type="text" value="${(s.name||'').replace(/"/g,'&quot;')}"
+               placeholder="e.g. product name, tool, technique…"
+               oninput="updateStepName('${period}',${i},this.value)"
+               style="flex:1;font-size:13px;font-weight:600;color:var(--plum);
+                 border:none;border-bottom:1.5px solid var(--border);background:transparent;
+                 padding:4px 0;font-family:'DM Sans',sans-serif;outline:none;">
+        <button onclick="deleteStep('${period}',${i})"
+                style="background:none;border:none;color:var(--text-muted);font-size:22px;
+                  cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0;">×</button>
+      </div>`).join('')
+    + `<div style="padding:10px 14px;">
+         <button onclick="addStep('${period}')"
+                 style="width:100%;padding:10px;background:none;
+                   border:1.5px dashed var(--border);border-radius:12px;
+                   color:var(--text-muted);font-size:12px;font-weight:600;
+                   cursor:pointer;font-family:'DM Sans',sans-serif;">
+           + Add a step ♡
+         </button>
+       </div>`;
+  } else {
+    return steps.map(s=>`
+      <div class="routine-step" onclick="toggleStep('${s.id}')">
+        <div class="step-check ${log[s.id]?'done':''}">${log[s.id]?'♡':''}</div>
+        <div class="step-info">
+          <div class="step-name">${s.name||'<em style="opacity:0.5">unnamed step</em>'}</div>
+          <div class="step-tip">${s.tip||''}</div>
+        </div>
+        <div class="step-icon">${s.icon||'✨'}</div>
+      </div>`).join('');
+  }
+}
+
+function renderTrackerSteps(){
+  const today=TODAY(); const log=S.routineLog[today]||{};
+  const tab = S.trackerTab || 'skincare';
+
+  // Sync tab button states
+  document.querySelectorAll('.tracker-tab-btn').forEach(b=>{
+    const active = b.dataset.tab === tab;
+    b.style.background = active ? 'var(--pink-deep)' : 'transparent';
+    b.style.color = active ? '#fff' : 'var(--text-muted)';
+    b.style.borderColor = active ? 'var(--pink-deep)' : 'var(--border)';
+  });
+
+  const skincareSection = document.getElementById('skincare-tab-content');
+  const makeupSection = document.getElementById('makeup-tab-content');
+  if(!skincareSection||!makeupSection) return;
+
+  if(tab==='skincare'){
+    skincareSection.style.display='';
+    makeupSection.style.display='none';
+    ['am','pm'].forEach(period=>{
+      const steps=getSteps(period);
+      const editing=period==='am'?amEditing:pmEditing;
+      document.getElementById(`${period}-steps`).innerHTML = renderStepBlock(period, steps, log, editing);
+    });
+  } else {
+    skincareSection.style.display='none';
+    makeupSection.style.display='';
+    const mkEl=document.getElementById('mk-steps');
+    if(mkEl){
+      const mkEditBtn = document.getElementById('mk-edit-btn');
+      if(!S.makeupEnabled){
+        if(mkEditBtn) mkEditBtn.style.display='none';
+        mkEl.innerHTML=`
+          <div style="padding:28px 20px;text-align:center;">
+            <div style="font-size:36px;margin-bottom:10px;">💄</div>
+            <div style="font-size:14px;font-weight:700;color:var(--plum);margin-bottom:6px;">Add a Makeup Tracker</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">Track your daily makeup steps alongside your skincare ritual.</div>
+            <button class="btn-primary" onclick="enableMakeupTab()">Enable Makeup Tracker ♡</button>
+          </div>`;
+      } else {
+        if(mkEditBtn){
+          mkEditBtn.style.display='';
+          mkEditBtn.textContent = mkEditing ? '✓ Done' : '✎ Edit';
+          mkEditBtn.style.color = mkEditing ? 'var(--pink-deep)' : 'var(--text-muted)';
+          mkEditBtn.style.borderColor = mkEditing ? 'var(--pink-deep)' : 'var(--border)';
+        }
+        mkEl.innerHTML = renderStepBlock('makeup', getSteps('makeup'), log, mkEditing);
+      }
+    }
+  }
+  updateProgress();
+}
+
+function toggleStep(id){
+  const today=TODAY();
+  if(!S.routineLog[today]) S.routineLog[today]={};
+  S.routineLog[today][id]=!S.routineLog[today][id];
+  saveState(); renderTrackerSteps(); checkStreak();
+}
+
+function updateProgress(){
+  const today=TODAY(); const log=S.routineLog[today]||{};
+  // Streak is based on skincare only; progress bar shows current tab
+  const tab = S.trackerTab||'skincare';
+  let all;
+  if(tab==='makeup' && S.makeupEnabled){
+    all = getSteps('makeup');
+  } else {
+    all=[...getSteps('am'),...getSteps('pm')];
+  }
+  const done=all.filter(s=>log[s.id]).length;
+  const pct=all.length?Math.round((done/all.length)*100):0;
+  document.getElementById('progress-bar').style.width=pct+'%';
+  document.getElementById('progress-label').textContent=`${done} of ${all.length} steps complete`;
+  document.getElementById('progress-pct').textContent=pct+'%';
+}
+
+function checkStreak(){
+  const today=TODAY(); const log=S.routineLog[today]||{};
+  // Streak = skincare ritual completion only
+  const all=[...getSteps('am'),...getSteps('pm')];
+  if(all.length&&all.filter(s=>log[s.id]).length===all.length&&S.lastLogDate!==today){
+    S.lastLogDate=today; S.streak++; saveState(); updateStreak(); renderWings();
+    showToast('Ritual complete! Streak: '+S.streak+' ♡');
+  }
+}
+
+function updateStreak(){
+  document.getElementById('streak-num').textContent=S.streak;
+  const msgs=['Start your ritual today!','Beautiful start ♡','Two days glowing!','Habit forming ✨','One week strong!','You are radiant!','Unstoppable ✨'];
+  document.getElementById('streak-msg').textContent=msgs[Math.min(S.streak,msgs.length-1)];
+  renderWeeklyProgress();
+  // Loss aversion warning
+  const warn=document.getElementById('streak-warning');
+  const warnText=document.getElementById('streak-warning-text');
+  if(!warn) return;
+  const today=TODAY(); const log=S.routineLog[today]||{};
+  const all=[...AM_STEPS,...PM_STEPS];
+  const doneToday=all.filter(s=>log[s.id]).length;
+  if(S.streak>0 && doneToday<all.length){
+    warn.style.display='flex';
+    if(S.streak>=7) warnText.textContent=`You have a ${S.streak}-day streak — don't lose it today 🔥 Complete your ritual to keep your wings growing ♡`;
+    else if(S.streak>=3) warnText.textContent=`${S.streak}-day streak in progress! Finish today's ritual to keep your wings ♡`;
+    else warnText.textContent=`You started your streak — don\'t stop now! Complete today\'s ritual ♡`;
+  } else { warn.style.display='none'; }
+}
+
+function renderWeeklyProgress(){
+  const today=new Date();
+  const days=['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const todayStr=TODAY();
+  const all=[...AM_STEPS,...PM_STEPS];
+
+  // Build last 7 days
+  let weekHTML='';
+  for(let i=6;i>=0;i--){
+    const d=new Date(today); d.setDate(today.getDate()-i);
+    const ds=d.toISOString().split('T')[0];
+    const log=S.routineLog[ds]||{};
+    const complete=all.filter(s=>log[s.id]).length===all.length;
+    const partial=!complete&&all.some(s=>log[s.id]);
+    const isToday=ds===todayStr;
+    let dotContent=complete?'♡':partial?'·':'';
+    let dotClass='week-dot'+(complete?' done':'')+(isToday&&!complete?' today':'');
+    weekHTML+=`<div class="week-day"><div class="week-day-label">${days[d.getDay()]}</div><div class="${dotClass}">${dotContent}</div></div>`;
+  }
+  document.getElementById('week-row').innerHTML=weekHTML;
+
+  // Monthly progress
+  const year=today.getFullYear(), month=today.getMonth();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  let completedDays=0;
+  for(let d=1;d<=today.getDate();d++){
+    const ds=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const log=S.routineLog[ds]||{};
+    if(all.filter(s=>log[s.id]).length===all.length) completedDays++;
+  }
+  const pct=Math.round((completedDays/daysInMonth)*100);
+  document.getElementById('month-bar').style.width=pct+'%';
+  document.getElementById('month-pct').textContent=pct+'%';
+  document.getElementById('month-days-label').textContent=`${completedDays} day${completedDays!==1?'s':''} this month`;
+  document.getElementById('month-name').textContent=today.toLocaleDateString('en-US',{month:'long'});
+}
+
+let selectedSkins=[];
+function renderSkinButtons(){
+  document.getElementById('skin-log-btns').innerHTML=SKIN_OPTIONS.map(opt=>
+    `<button class="skin-pill" onclick="toggleSkin(this,'${opt}')">${opt}</button>`).join('');
+}
+function toggleSkin(el,opt){
+  el.classList.toggle('on');
+  const idx=selectedSkins.indexOf(opt);
+  if(idx>-1) selectedSkins.splice(idx,1); else selectedSkins.push(opt);
+}
+function saveSkinLog(){
+  if(!selectedSkins.length){ showToast('Select how your skin feels ♡'); return; }
+  S.skinLogs.unshift({date:TODAY(),skin:[...selectedSkins]});
+  selectedSkins=[]; renderSkinButtons(); saveState(); showToast('Skin log saved ♡');
+}
+
+function toggleNotif(){
+  if(!S.notifOn){
+    if('Notification' in window){
+      Notification.requestPermission().then(p=>{ S.notifOn=p==='granted'; if(S.notifOn) showToast('Reminders on ♡'); else showToast('Permission denied'); saveState(); updateNotifUI(); });
+    }
+  } else { S.notifOn=false; saveState(); updateNotifUI(); showToast('Reminders off'); }
+}
+function updateNotifUI(){
+  const tog=document.getElementById('notif-toggle');
+  const sub=document.getElementById('notif-sub');
+  if(S.notifOn){ tog.classList.add('on'); sub.textContent='Daily reminders: 8am & 9pm ♡'; }
+  else { tog.classList.remove('on'); sub.textContent='Tap to enable AM & PM reminders'; }
+}
+
+function renderAllergenGrid(){
+  document.getElementById('allergen-grid').innerHTML=ALLERGEN_PRESETS.map(a=>
+    `<button class="allergen-btn ${S.selectedAllergens.includes(a.id)?'selected':''}" onclick="toggleAllergen('${a.id}',this)">
+      <span class="a-icon">${a.icon}</span>
+      <div><div class="a-label">${a.label}</div><div class="a-sub">${a.sub}</div></div>
+    </button>`).join('');
+}
+function toggleAllergen(id,el){
+  el.classList.toggle('selected');
+  const idx=S.selectedAllergens.indexOf(id);
+  if(idx>-1) S.selectedAllergens.splice(idx,1); else S.selectedAllergens.push(id);
+  saveState();
+}
+function addCustom(){
+  const inp=document.getElementById('custom-input'); const val=inp.value.trim();
+  if(!val||S.customAllergens.includes(val)) return;
+  S.customAllergens.push(val); saveState(); renderCustomTags(); inp.value='';
+}
+function removeCustom(val){ S.customAllergens=S.customAllergens.filter(x=>x!==val); saveState(); renderCustomTags(); }
+function renderCustomTags(){
+  document.getElementById('custom-tags').innerHTML=S.customAllergens.map(a=>
+    `<div class="custom-tag">${a}<span class="rm" onclick="removeCustom('${a}')">×</span></div>`).join('');
+}
+function saveProfile(){ S.name=document.getElementById('profile-name').value.trim(); saveState(); }
+
+function renderAgeGroups(){
+  document.getElementById('age-group-btns').innerHTML=AGE_GROUPS.map(g=>
+    `<button class="skin-pill ${S.age===g.id?'on':''}" onclick="selectAge('${g.id}')">${g.icon} ${g.label}</button>`).join('');
+  showAgeTip();
+}
+
+function selectAge(id){
+  S.age=id; saveState(); renderAgeGroups();
+}
+
+function showAgeTip(){
+  const el=document.getElementById('age-skincare-tip');
+  const g=AGE_GROUPS.find(x=>x.id===S.age);
+  if(!g){ el.style.display='none'; return; }
+  el.style.display='block';
+  el.innerHTML=`<div style="background:linear-gradient(135deg,var(--blush),var(--lavender));border:1.5px solid var(--border);border-radius:16px;padding:14px 16px;">
+    <div style="font-size:13px;font-weight:700;color:var(--pink-deep);margin-bottom:6px;font-family:'Playfair Display',serif;">Cupid's tip for your ${g.label} ${g.icon}</div>
+    <div style="font-size:12px;color:var(--plum-mid);line-height:1.7;">${g.tip}</div>
+  </div>`;
+}
+
+function updateHistoryScreen(){
+  document.getElementById('s-total').textContent=S.scans.length;
+  document.getElementById('s-flagged').textContent=S.scans.filter(s=>s.verdict==='danger').length;
+  document.getElementById('s-safe').textContent=S.scans.filter(s=>s.verdict==='safe').length;
+  const el=document.getElementById('history-list');
+  if(!S.scans.length){ el.innerHTML=`<div class="empty-state"><span class="e-icon">♡</span><p>No scans yet, darling.<br>Scan your first product!</p></div>`; return; }
+  el.innerHTML=S.scans.map(s=>{
+    const date=new Date(s.date).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    const badge=s.verdict==='danger'?`🚨 ${s.flaggedCount} Allergen${s.flaggedCount>1?'s':''}`:s.verdict==='warn'?`⚠️ ${s.cautionCount} Caution`:'♡ Safe';
+    return `<div class="scan-entry"><div class="scan-entry-top"><div class="scan-name">${s.name}</div><div class="s-badge ${s.verdict}">${badge}</div></div><div class="scan-date">${date} · ${s.total} ingredients</div>${s.flaggedNames.length?`<div class="scan-flags">⚠️ ${s.flaggedNames.join(', ')}</div>`:''}</div>`;
+  }).join('');
+}
+
+
+function handleImage(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const imgEl=document.getElementById('img-preview');
+    imgEl.src=ev.target.result; imgEl.style.display='block';
+    document.getElementById('scan-icon-emoji').textContent='⏳';
+    document.getElementById('scan-box-title').textContent='Reading ingredients...';
+    document.getElementById('scan-box-sub').textContent='Cupid is scanning the label ♡';
+    const status=document.getElementById('ocr-status');
+    status.style.display='block'; status.textContent='Preparing image...';
+    // Preprocess then OCR
+    preprocessImage(ev.target.result, processed=>{
+      if(typeof Tesseract==='undefined'){
+        status.textContent='Loading text engine...';
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js';
+        s.onload=()=>runOCR(processed);
+        document.head.appendChild(s);
+      } else { runOCR(processed); }
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+function preprocessImage(src, callback){
+  const img=new Image();
+  img.onload=()=>{
+    // Scale up small images for better OCR
+    const scale=Math.max(1, Math.min(3, 2000/Math.max(img.width,img.height)));
+    const w=img.width*scale, h=img.height*scale;
+    const canvas=document.createElement('canvas');
+    canvas.width=w; canvas.height=h;
+    const ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,w,h);
+    // Convert to grayscale + boost contrast
+    const imageData=ctx.getImageData(0,0,w,h);
+    const d=imageData.data;
+    for(let i=0;i<d.length;i+=4){
+      // Grayscale
+      const gray=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
+      // High contrast: push darks darker, lights lighter
+      const contrast=1.8;
+      const factor=(259*(contrast*255+255))/(255*(259-contrast*255));
+      const c=Math.min(255,Math.max(0,factor*(gray-128)+128));
+      d[i]=d[i+1]=d[i+2]=c;
+    }
+    ctx.putImageData(imageData,0,0);
+    callback(canvas.toDataURL('image/png'));
+  };
+  img.src=src;
+}
+
+function runOCR(imageSrc){
+  const status=document.getElementById('ocr-status');
+  status.textContent='Reading label... ♡';
+  Tesseract.recognize(imageSrc,'eng',{
+    tessedit_pageseg_mode:'6',
+    tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,/()-+%\'',
+    logger: m=>{ if(m.status==='recognizing text') status.textContent=`Reading label... ${Math.round(m.progress*100)}%`; }
+  }).then(({data:{text}})=>{
+    const cleaned=cleanOCRText(text);
+    if(cleaned.length<15){
+      status.textContent='⚠️ Couldn\'t read text clearly — try a flatter, brighter photo, or paste manually.';
+      resetScanBox(); return;
+    }
+    document.getElementById('ing-input').value=cleaned;
+    status.textContent='✓ Done! Review the list below, then tap Analyze ♡';
+    document.getElementById('scan-icon-emoji').textContent='✅';
+    document.getElementById('scan-box-title').textContent='Label Read!';
+    document.getElementById('scan-box-sub').textContent='Check and edit the list below if needed, then tap Analyze ♡';
+    showToast('Text detected ♡ check & tap Analyze!');
+  }).catch(()=>{
+    status.textContent='⚠️ Read failed. Try better lighting or paste manually.';
+    resetScanBox();
+  });
+}
+
+function cleanOCRText(raw){
+  const knownWords=['water','aqua','glycerin','glycerine','acid','extract','oil','butyl','methyl','propyl','ethyl','sodium','potassium','oxide','alcohol','zinc','tocopherol','niacinamide','ceramide','hyaluronic','retinol','salicyl','citric','lactic','panthenol','allantoin','squalane','fragrance','parfum','phenoxy','dimethicone','silica','titanium','ascorbic','ferment','centella','adenosine','propolis','limonene','linalool','geraniol','coumarin','glycol','sorbitol','stearic','palmitic','caprylic','carbomer','xanthan','cellulose','lecithin','collagen','elastin','peptide','caffeine','resveratrol','bakuchiol','azelaic','tranexamic','mica','carmine','talc','bismuth','isopropyl','lanolin','paraben','sulfate','silicone','cyclopenta','cetearyl','cetyl','niacin','argania','rosehip','argan','polyglutamic','ferulic','arbutin'];
+
+  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l.length>1);
+  const goodLines=[];
+
+  for(const line of lines){
+    const lower=line.toLowerCase();
+    // Skip lines with too many non-cosmetic characters (gibberish)
+    const specialRatio=(line.match(/[^a-zA-Z0-9 .,()'\-\/+%\[\]]/g)||[]).length/line.length;
+    if(specialRatio>0.3) continue;
+    // Skip very short fragments
+    if(line.length<3) continue;
+    // Skip lines that are mostly numbers (bar codes, weights, etc.)
+    if((line.match(/\d/g)||[]).length/line.length>0.5) continue;
+    // Skip marketing / non-ingredient lines
+    const skipPhrases=['ingredients:','ingrédients:','inci:','contains:','composition:','how to use','directions','warnings','keep out','net weight','manufactured','distributed','batch','lot no','exp ','best before','www.','@'];
+    if(skipPhrases.some(p=>lower.startsWith(p))) continue;
+    const hasIngredient=knownWords.some(w=>lower.includes(w));
+    const letterRatio=(line.match(/[a-zA-Z]/g)||[]).length/line.length;
+    if(hasIngredient||(letterRatio>0.72&&line.length>4)){
+      goodLines.push(line.replace(/\s+/g,' '));
+    }
+  }
+
+  if(!goodLines.length) return '';
+
+  // Join lines. If they already contain commas, treat as INCI list;
+  // otherwise join with comma separators.
+  const joined = goodLines.join(' ');
+
+  // Split on commas to get individual entries, then clean each
+  const entries = joined
+    .split(/,/)
+    .map(e=>e
+      .replace(/[|\\{}\[\]<>_~`^*]/g,'') // strip OCR artefacts
+      .replace(/\s+/g,' ')
+      .trim()
+    )
+    .filter(e=>e.length>1 && (e.match(/[a-zA-Z]/g)||[]).length>1);
+
+  // Re-join as clean comma-separated INCI list
+  return entries.join(', ');
+}
+
+function resetScanBox(){
+  document.getElementById('scan-icon-emoji').textContent='📸';
+  document.getElementById('scan-box-title').textContent='Photograph a Label';
+  document.getElementById('scan-box-sub').textContent='Take or upload a photo of any ingredient list and Cupid reads it for you ♡';
+}
+
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const s=document.getElementById('screen-'+name); const n=document.getElementById('nav-'+name);
+  if(s) s.classList.add('active'); if(n) n.classList.add('active');
+  if(name==='history') updateHistoryScreen();
+  if(name==='tracker'){ switchTrackerTab(S.trackerTab||'skincare'); updateStreak(); renderWings(); }
+  if(name==='profile'){ updateSubStatus(); renderAgeGroups(); }
+}
+
+// ── BARCODE SCANNER ──────────────────────────────────────
+let barcodeStream=null, barcodeDetector=null, barcodeRAF=null;
+
+function openBarcodeScanner(){
+  if(!S.isPro&&S.scanCount>=FREE_SCAN_LIMIT){ showPaywall(); return; }
+  document.getElementById('barcode-overlay').classList.add('show');
+  document.getElementById('barcode-status').textContent='Starting camera ♡';
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}})
+    .then(stream=>{
+      barcodeStream=stream;
+      const vid=document.getElementById('barcode-video');
+      vid.srcObject=stream; vid.play();
+      document.getElementById('barcode-status').textContent='Point at any product barcode ♡';
+      startBarcodeDetection(vid);
+    })
+    .catch(()=>{
+      document.getElementById('barcode-status').textContent='Camera access denied — please allow camera access';
+    });
+}
+
+function closeBarcodeScanner(){
+  if(barcodeStream) barcodeStream.getTracks().forEach(t=>t.stop());
+  if(barcodeRAF) cancelAnimationFrame(barcodeRAF);
+  barcodeStream=null; barcodeDetector=null; barcodeRAF=null;
+  document.getElementById('barcode-overlay').classList.remove('show');
+}
+
+function startBarcodeDetection(vid){
+  // Use BarcodeDetector API if available (Chrome/Android), else ZXing fallback
+  if('BarcodeDetector' in window){
+    barcodeDetector=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']});
+    const scan=()=>{
+      if(!barcodeStream) return;
+      barcodeDetector.detect(vid).then(codes=>{
+        if(codes.length>0){ handleBarcodeFound(codes[0].rawValue); return; }
+        barcodeRAF=requestAnimationFrame(scan);
+      }).catch(()=>{ barcodeRAF=requestAnimationFrame(scan); });
+    };
+    vid.addEventListener('loadeddata',()=>{ barcodeRAF=requestAnimationFrame(scan); },{once:true});
+  } else {
+    // Load ZXing as fallback
+    document.getElementById('barcode-status').textContent='Loading scanner... ♡';
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/zxing-js/0.20.0/zxing.min.js';
+    s.onload=()=>{
+      const hints=new Map();
+      const codeReader=new ZXing.BrowserMultiFormatReader(hints);
+      codeReader.decodeFromVideoElement(vid).then(result=>{
+        if(result) handleBarcodeFound(result.getText());
+      }).catch(()=>{
+        document.getElementById('barcode-status').textContent='Scanner ready — point at barcode ♡';
+      });
+      // Poll for result
+      const poll=setInterval(()=>{
+        codeReader.decodeFromVideoElement(vid).then(result=>{
+          if(result){ clearInterval(poll); handleBarcodeFound(result.getText()); }
+        }).catch(()=>{});
+      },800);
+    };
+    s.onerror=()=>{ document.getElementById('barcode-status').textContent='Try typing the barcode number instead'; };
+    document.head.appendChild(s);
+  }
+}
+
+function handleBarcodeFound(barcode){
+  document.getElementById('barcode-status').textContent=`Found barcode: ${barcode} — looking up product... ♡`;
+  if(barcodeRAF) cancelAnimationFrame(barcodeRAF);
+  // Look up on Open Beauty Facts
+  fetch(`https://world.openbeautyfacts.org/api/v0/product/${barcode}.json`)
+    .then(r=>r.json())
+    .then(data=>{
+      closeBarcodeScanner();
+      if(data.status===0){ showToast('Product not found — try pasting ingredients manually'); return; }
+      const p=data.product;
+      let ing=p.ingredients_text_en||p.ingredients_text||p.ingredients_text_fr||'';
+      if(!ing){ showToast('No ingredient data for this product yet'); return; }
+      // Strip "Ingredients:" header if present, and clean up API text
+      ing = ing
+        .replace(/^ingredients\s*[:：]\s*/i,'')
+        .replace(/^ingrédients\s*[:：]\s*/i,'')
+        .replace(/\s*\[may contain\s*[:\s]([^\]]+)\]/gi,'') // strip "may contain" footnotes
+        .replace(/\[\+\/\-\]/g,'')
+        .replace(/\*+[^,]*/g,'') // strip asterisk footnotes
+        .replace(/\s{2,}/g,' ')
+        .trim();
+      // Set product name context and populate
+      const name=p.product_name||p.product_name_en||'Product';
+      document.getElementById('ing-input').value=ing;
+      showToast(`Found: ${name} ♡ tap Analyze!`);
+      // Store product name for saving
+      S._pendingProductName=name;
+    })
+    .catch(()=>{ closeBarcodeScanner(); showToast('Lookup failed — check your connection'); });
+}
+
+// ── WINGS ─────────────────────────────────────────────────
+const WING_LEVELS=[
+  { streak:0,  name:'Seedling',   sub:'Complete your ritual daily and watch your wings grow ♡',       color:'#e8c4d8' },
+  { streak:3,  name:'Budding',    sub:'3 days in — tiny wings are forming ♡',                          color:'#e8a0b8' },
+  { streak:7,  name:'Blossoming', sub:'One week of glowing skin. Your wings are spreading ♡',          color:'#c4617a' },
+  { streak:14, name:'Flourishing',sub:'Two weeks! Your wings shimmer with dedication ♡',               color:'#c09070' },
+  { streak:21, name:'Radiant',    sub:'21 days — you are becoming an angel of skincare ♡',             color:'#9060c0' },
+  { streak:30, name:'Celestial ✦',sub:'30 days. Full angel wings. You are a skincare legend ♡',        color:'#c4617a' },
+];
+
+function getWingLevel(streak){
+  let level=WING_LEVELS[0];
+  for(const l of WING_LEVELS){ if(streak>=l.streak) level=l; }
+  return level;
+}
+
+function renderWings(){
+  const streak=S.streak;
+  const level=getWingLevel(streak);
+  const progress=Math.min(1, streak/30); // 0→1 over 30 days
+  const svg=document.getElementById('wings-svg');
+  const color=level.color;
+
+  // Wing size grows with progress
+  const size=0.15+progress*0.85; // 15% to 100% size
+  const opacity=0.3+progress*0.7;
+  const cx=80, cy=55; // center (body)
+
+  // Draw wings as bezier curves — mirror left and right
+  const wing=(side)=>{
+    const s=side===1?1:-1; // 1=right, -1=left
+    const spread=50*size*s;
+    const lift=30*size;
+    const featherSpread=70*size*s;
+    return `
+      <path d="M${cx} ${cy}
+               C ${cx+spread*0.3} ${cy-lift*0.5},
+                 ${cx+spread*0.8} ${cy-lift},
+                 ${cx+featherSpread} ${cy-lift*0.3}
+               C ${cx+featherSpread*0.9} ${cy+lift*0.4},
+                 ${cx+spread*0.4} ${cy+lift*0.1},
+                 ${cx} ${cy} Z"
+            fill="${color}" opacity="${opacity}" />
+      <path d="M${cx} ${cy}
+               C ${cx+spread*0.2} ${cy-lift*0.2},
+                 ${cx+featherSpread*0.7} ${cy-lift*1.2},
+                 ${cx+featherSpread*0.9} ${cy-lift*0.8}
+               C ${cx+featherSpread*0.6} ${cy-lift*0.3},
+                 ${cx+spread*0.3} ${cy},
+                 ${cx} ${cy} Z"
+            fill="${color}" opacity="${opacity*0.7}" />
+    `;
+  };
+
+  // Heart body in center
+  const heartSize=8+progress*4;
+  const hx=cx, hy=cy-heartSize*0.2;
+
+  svg.innerHTML=`
+    ${wing(1)}
+    ${wing(-1)}
+    <g transform="translate(${hx},${hy}) scale(${heartSize/10})">
+      <path d="M0 3 C0 0 -4 -3 -4 0 C-4 3 0 6 0 8 C0 6 4 3 4 0 C4 -3 0 0 0 3Z"
+            fill="${color}" opacity="${Math.min(1,opacity+0.2)}"/>
+    </g>
+    ${progress>0.5?`<g opacity="${(progress-0.5)*2}">
+      <text x="${cx-30}" y="${cy-40*size}" font-size="8" fill="${color}" opacity="0.6">✦</text>
+      <text x="${cx+22}" y="${cy-38*size}" font-size="6" fill="${color}" opacity="0.5">✦</text>
+      <text x="${cx}" y="${cy-50*size}" font-size="10" fill="${color}" opacity="0.4">✦</text>
+    </g>`:''}
+  `;
+
+  document.getElementById('wings-level').textContent=level.name+' ✦';
+  document.getElementById('wings-sub').textContent=level.sub;
+
+  // Milestone pips
+  document.getElementById('wings-milestones').innerHTML=WING_LEVELS.slice(1).map(l=>
+    `<div class="milestone-pip ${streak>=l.streak?'reached':''}">${l.streak}d · ${l.name}</div>`
+  ).join('');
+}
+
+function capWords(s){ return s.replace(/\b\w/g,c=>c.toUpperCase()); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+function saveState(){ localStorage.setItem('cupidApp',JSON.stringify(S)); }
+function loadState(){ const d=localStorage.getItem('cupidApp'); if(d) S={...S,...JSON.parse(d)}; }
+</script>
+</body>
+</html>
